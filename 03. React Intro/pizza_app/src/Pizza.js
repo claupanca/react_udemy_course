@@ -1,21 +1,22 @@
 import pizzaData from "./data";
 // import { useState } from "react";
 
-function Pizza() {
-  // const [pizzas, setPizzas] = useState(pizzaData);
+function Pizza(props) {
+  const pizzaDetails = props.pizzaDetails;
 
-  // console.log(pizzas);
+  console.log(pizzaDetails);
 
   return (
-    <div>
-      <h3>Pizza Spinacchi</h3>
-      <p>Tomato and mozarella</p>
-      <img src={require("./assets/pizzas/spinaci.jpg")} alt="Spinaci pizza" />
-      <ul>
-        {pizzaData.map((item) => (
-          <li key={item.name}>{item.name}</li>
-        ))}
-      </ul>
+    <div className={`pizza ${pizzaDetails.soldOut ? "sold-out" : ""}`}>
+      <img
+        src={require(`./assets/${pizzaDetails.photoName}`)}
+        alt="Spinaci pizza"
+      />
+      <div>
+        <h3>{pizzaDetails.name}</h3>
+        <p>{pizzaDetails.ingredients}</p>
+        <span>{pizzaDetails.price}</span>
+      </div>
     </div>
   );
 }
