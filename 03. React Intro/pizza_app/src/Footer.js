@@ -1,6 +1,6 @@
 function Footer() {
   const hour = new Date().getHours();
-  const openHour = 12;
+  const openHour = 11;
   const closeHour = 22;
 
   const isOpen = hour >= openHour && hour <= closeHour;
@@ -15,8 +15,13 @@ function Footer() {
   // // hour < 21 ? alert("Restaurant is Open") : alert("Restaurant is Closed");
 
   return (
-    <footer className="footer">
-      {new Date().toLocaleTimeString("EN")} We are currently Open
+    <footer className="footer ">
+      {isOpen && (
+        <div className="order">
+          <p>{new Date().toLocaleTimeString("EN")} We are currently Open</p>
+          <button className="btn">Order Now</button>
+        </div>
+      )}
     </footer>
   );
 }

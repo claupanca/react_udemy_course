@@ -1,13 +1,13 @@
 import pizzaData from "./data";
 // import { useState } from "react";
 
-function Pizza(props) {
-  const pizzaDetails = props.pizzaDetails;
+function Pizza({ pizzaDetails }) {
+  // const pizzaDetails = props.pizzaDetails;
 
   console.log(pizzaDetails);
 
   return (
-    <div className={`pizza ${pizzaDetails.soldOut ? "sold-out" : ""}`}>
+    <li className={`pizza ${pizzaDetails.soldOut ? "sold-out" : ""}`}>
       <img
         src={require(`./assets/${pizzaDetails.photoName}`)}
         alt="Spinaci pizza"
@@ -15,9 +15,9 @@ function Pizza(props) {
       <div>
         <h3>{pizzaDetails.name}</h3>
         <p>{pizzaDetails.ingredients}</p>
-        <span>{pizzaDetails.price}</span>
+        <span>{pizzaDetails.soldOut ? "SOLD OUT" : pizzaDetails.price}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
