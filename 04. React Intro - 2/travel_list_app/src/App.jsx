@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Form from "./Form";
+import List from "./List";
+import Stats from "./Stats";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { useState } from "react";
+
+const initialItems = [
+  { id: 1, description: "Passports", quantity: 2, packed: false },
+  { id: 2, description: "Socks", quantity: 12, packed: false },
+];
+
+export default function App() {
+  const [list, setList] = useState(() => initialItems);
+
+  function handleListClick(id) {
+    console.log("id from APP", id);
+    const listItemIndex = list.indexOf(list.find((item) => item.id == id));
+    console.log("listItemIndex", listItemIndex);
+    setList((prevState) => {
+      // console.log("in set List");
+      const updatedList = [...prevState];
+      // console.log("updatedList", [...updatedList]);
+      console.log("packed before", updatedList[listItemIndex].packed);
+      updatedList[listItemIndex].packed = !updatedList[listItemIndex].packed;
+
+      console.log("packed after", updatedList[listItemIndex].packed);
+
+      console.log("updated List", updatedList);
+      return updatedList;
+    });
+  }
+
+  console.log("list", list[0]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      <h1>Travel List</h1>
+      <Form />
+      <List list={list} handleClick={handleListClick} />
+      <Stats />
+    </div>
+  );
 }
-
-export default App
