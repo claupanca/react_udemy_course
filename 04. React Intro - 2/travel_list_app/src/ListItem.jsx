@@ -1,9 +1,10 @@
 export default function ListItem({ info, handleClick }) {
   // console.log("info", info);
 
-  function handleListItemClick() {
-    console.log("click handled", info.id);
-    handleClick(info.id);
+  function handleListItemClick(e) {
+    e.preventDefault();
+    console.log("click handled");
+    handleClick(e.target.id.split("-")[1]);
   }
 
   return (
@@ -16,7 +17,7 @@ export default function ListItem({ info, handleClick }) {
       ></input>
       <label
         htmlFor={`check-${info.id}`}
-        style={{ textDecoration: `${info.packed ? "line-through" : "none"}` }}
+        style={info.packed ? { textDecoration: "line-through" } : {}}
       >
         <span>{info.quantity} </span>
         <span>{info.description}</span>

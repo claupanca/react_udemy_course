@@ -5,12 +5,13 @@ import Stats from "./Stats";
 import { useState } from "react";
 
 const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
+  { id: 1, description: "Passports", quantity: 2, packed: true },
   { id: 2, description: "Socks", quantity: 12, packed: false },
 ];
 
 export default function App() {
   const [list, setList] = useState(() => initialItems);
+  let counter = 3;
 
   function handleListClick(id) {
     console.log("id from APP", id);
@@ -30,12 +31,26 @@ export default function App() {
     });
   }
 
-  console.log("list", list[0]);
+  function handleNewItem(newItem) {
+    console.log("handle New Item", newItem);
+    setList((prevState) => [
+      ...prevState,
+      {
+        id: counter++,
+        description: newItem[1],
+        quantity: newItem[0],
+        packed: false,
+      },
+    ]);
+  }
+
+  console.log("list", list);
+  // ,
 
   return (
     <div className="app">
       <h1>Travel List</h1>
-      <Form />
+      <Form handleSubmit={handleNewItem} />
       <List list={list} handleClick={handleListClick} />
       <Stats />
     </div>
