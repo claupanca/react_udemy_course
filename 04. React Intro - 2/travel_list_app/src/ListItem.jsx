@@ -1,19 +1,29 @@
-export default function ListItem({ info, handleClick }) {
-  // console.log("info", info);
+export default function ListItem({ info, handleClick, handleDelete }) {
+  console.log("info", info);
 
-  function handleListItemClick(e) {
-    e.preventDefault();
-    console.log("click handled");
-    handleClick(e.target.id.split("-")[1]);
+  // function handleListItemClick(e) {
+  //   e.preventDefault();
+  //   console.log("click handled");
+  //   handleClick(e.target.id.split("-")[1]);
+  // }
+
+  function changeClick(e) {
+    console.log("change click");
+    handleClick(e.target.closest("li").id);
+  }
+
+  function deleteClick(e) {
+    console.log("delete click");
+    handleDelete(e.target.closest("li").id);
   }
 
   return (
-    <li>
+    <li id={info.id}>
       <input
         type="checkbox"
+        checked={info.packed}
+        onChange={changeClick}
         id={`check-${info.id}`}
-        defaultChecked={info.packed}
-        onClick={handleListItemClick}
       ></input>
       <label
         htmlFor={`check-${info.id}`}
@@ -22,7 +32,7 @@ export default function ListItem({ info, handleClick }) {
         <span>{info.quantity} </span>
         <span>{info.description}</span>
       </label>
-      <button>
+      <button onClick={deleteClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

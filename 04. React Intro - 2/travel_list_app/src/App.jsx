@@ -3,32 +3,56 @@ import List from "./List";
 import Stats from "./Stats";
 
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: true },
-  { id: 2, description: "Socks", quantity: 12, packed: false },
+  {
+    id: uuidv4().split("-")[0],
+    description: "Passports",
+    quantity: 2,
+    packed: true,
+  },
+  {
+    id: uuidv4().split("-")[0],
+    description: "Socks",
+    quantity: 12,
+    packed: false,
+  },
 ];
 
 export default function App() {
   const [list, setList] = useState(() => initialItems);
-  let counter = 3;
 
   function handleListClick(id) {
     console.log("id from APP", id);
     const listItemIndex = list.indexOf(list.find((item) => item.id == id));
     console.log("listItemIndex", listItemIndex);
+
+    // Create a new array from actual state
+    const updatedList = [...list];
+
+    // Mutate the Newly created array
+    updatedList[listItemIndex].packed = !updatedList[listItemIndex].packed;
+
+    // UPDATE THE STATE ONLY WITH THE NEW ARRAY
     setList((prevState) => {
-      // console.log("in set List");
-      const updatedList = [...prevState];
-      // console.log("updatedList", [...updatedList]);
-      console.log("packed before", updatedList[listItemIndex].packed);
-      updatedList[listItemIndex].packed = !updatedList[listItemIndex].packed;
-
-      console.log("packed after", updatedList[listItemIndex].packed);
-
-      console.log("updated List", updatedList);
       return updatedList;
     });
+    // setList(
+    //   list.map((item) => {
+    //     item.id === id ? { ...item, packed: !item.packed } : item;
+    //   })
+  }
+
+  function handleDeleteClick(id) {
+    console.log("delete");
+    const listItemIndex = list.indexOf(list.find((item) => item.id == id));
+    console.log("listItemIndex", listItemIndex);
+
+    const updatedList = [...list].filter((item) => item.id !== id);
+    console.log("updatedList", updatedList);
+
+    setList((prevState) => updatedList);
   }
 
   function handleNewItem(newItem) {
@@ -36,7 +60,7 @@ export default function App() {
     setList((prevState) => [
       ...prevState,
       {
-        id: counter++,
+        id: uuidv4().split("-")[0],
         description: newItem[1],
         quantity: newItem[0],
         packed: false,
@@ -45,13 +69,16 @@ export default function App() {
   }
 
   console.log("list", list);
-  // ,
 
   return (
     <div className="app">
       <h1>Travel List</h1>
       <Form handleSubmit={handleNewItem} />
-      <List list={list} handleClick={handleListClick} />
+      <List
+        list={list}
+        handleClick={handleListClick}
+        handleDelete={handleDeleteClick}
+      />
       <Stats />
     </div>
   );
