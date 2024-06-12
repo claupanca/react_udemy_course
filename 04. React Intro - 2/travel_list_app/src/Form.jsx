@@ -1,14 +1,14 @@
 import { useState } from "react";
 
-export default function Form({ handleSubmit }) {
+export default function Form({ onHandleSubmit }) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
 
-  function formHandler(e) {
+  function handleAddItem(e) {
     e.preventDefault();
 
     if (description !== "") {
-      handleSubmit([quantity, description]);
+      onHandleSubmit([quantity, description]);
       setDescription((prevState) => "");
       setQuantity((prevState) => 1);
     } else {
@@ -17,7 +17,7 @@ export default function Form({ handleSubmit }) {
   }
 
   return (
-    <form className="add-form" onSubmit={formHandler}>
+    <form className="add-form" onSubmit={handleAddItem}>
       <h3>Add a new item:</h3>
       <select
         onChange={(e) => setQuantity(Number(e.target.value))}

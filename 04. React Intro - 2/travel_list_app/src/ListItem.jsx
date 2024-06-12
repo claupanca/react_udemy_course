@@ -1,5 +1,5 @@
-export default function ListItem({ info, handleClick, handleDelete }) {
-  console.log("info", info);
+export default function ListItem({ info, onItemClick, onDeleteClick }) {
+  // console.log("info", info);
 
   // function handleListItemClick(e) {
   //   e.preventDefault();
@@ -9,16 +9,17 @@ export default function ListItem({ info, handleClick, handleDelete }) {
 
   function changeClick(e) {
     console.log("change click");
-    handleClick(e.target.closest("li").id);
+    onItemClick(info.id);
   }
 
   function deleteClick(e) {
     console.log("delete click");
-    handleDelete(e.target.closest("li").id);
+    // onDeleteClick(e.target.closest("li").id);
+    onDeleteClick(info.id);
   }
 
   return (
-    <li id={info.id}>
+    <li>
       <input
         type="checkbox"
         checked={info.packed}
