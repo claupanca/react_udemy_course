@@ -60,7 +60,7 @@ function App() {
     <>
       <div className="steps" style={{ display: `${isOpen ? "" : "none"}` }}>
         <Numbers listOfMessages={listOfMessages} message={message} />
-        <Message message={message} />
+        <Message step={listOfMessages.indexOf(message) + 1}>{message}</Message>
         <Buttons handleClick={handleBtnClick} />
       </div>
       <Close handleClick={handleBtnClick} isOpen={isOpen} />

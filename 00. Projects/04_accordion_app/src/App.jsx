@@ -1,3 +1,6 @@
+import Item from "./Item";
+import { useState } from "react";
+
 const faqs = [
   {
     title: "Where are these chairs assembled?",
@@ -14,5 +17,29 @@ const faqs = [
 ];
 
 export default function App() {
-  return <div></div>;
+  const [list, setList] = useState(() => faqs);
+
+  const [isOpen, setIsOpen] = useState();
+
+  // we use the isOpen to keep track of what index is opened
+  function handleToggle(id) {
+    const checkId = isOpen === id ? "" : id;
+    console.log("checkid", checkId);
+
+    setIsOpen((prevState) => checkId);
+  }
+
+  return (
+    <div className="accordion">
+      {faqs.map((acc, index) => (
+        <Item
+          key={index}
+          info={acc}
+          index={index}
+          isOpen={isOpen === index ? true : false}
+          onToggleClick={handleToggle}
+        />
+      ))}
+    </div>
+  );
 }

@@ -1,7 +1,9 @@
-function Message({ message }) {
+function Message({ step, children }) {
   return (
     <div className="message">
-      <p>{message}</p>
+      <p>
+        Step {step}: {children}
+      </p>
     </div>
   );
 }
