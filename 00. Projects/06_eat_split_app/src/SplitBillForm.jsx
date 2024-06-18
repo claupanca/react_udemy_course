@@ -8,24 +8,24 @@ export default function SplitBillForm({ friendInfo, onSplitBill }) {
 
   const [bill, setBill] = useState();
   const [myExpense, setMyExpense] = useState();
-  const [friendExpense, setFriendExpense] = useState();
-  const [payee, setPayee] = useState("me");
+  // const [friendExpense, setFriendExpense] = useState();
+  const friendExpense = bill ? bill - myExpense : 0;
+  const [payer, setPayer] = useState("me");
 
   function handleMyExpense(e) {
-    const myExpense = Number(e.target.value);
-
-    setMyExpense((prevState) => myExpense);
-    setFriendExpense((prevState) => bill - myExpense);
+    setMyExpense((prevState) =>
+      Number(e.target.value) > bill ? myExpense : Number(e.target.value)
+    );
   }
 
   function handleSplitBill() {
     let result = 0;
-    if (payee === "me") {
+    if (payer === "me") {
       console.log("friend imi e dator cu", friendExpense);
       console.log("balanta lui friend", friendBalance);
       console.log("friend ramane cu ", friendBalance + friendExpense);
       result = friendBalance + friendExpense;
-    } else if (payee === "friend") {
+    } else if (payer === "friend") {
       console.log("friend ramane cu", friendBalance - myExpense);
       result = friendBalance - myExpense;
     }
@@ -49,10 +49,11 @@ export default function SplitBillForm({ friendInfo, onSplitBill }) {
         type="text"
         value={friendExpense}
         // onChange={(e) => setFriendExpense(e.target.value)}
+        disabled
       ></input>
       <label>💵Who is paying the bill?</label>
-      <select value={payee} onChange={(e) => setPayee(e.target.value)}>
-        <option value="me">Me</option>
+      <select value={payer} onChange={(e) => setPayer(e.target.value)}>
+        <option value="me">You</option>
         <option value="friend">{friendName}</option>
       </select>
       <button className="button" onClick={handleSplitBill}>

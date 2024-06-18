@@ -28,7 +28,7 @@ const initialFriends = [
 function App() {
   const [listOfFriends, setListOfFriends] = useState(() => initialFriends);
   const [splitBill, setSplitBill] = useState(false);
-  const [friend, setFriend] = useState({});
+  const [friendId, setFriendId] = useState({});
 
   function handleFriendAdd(friend) {
     setListOfFriends((prevState) => [...prevState, friend]);
@@ -37,9 +37,7 @@ function App() {
   function handleSelectFriend(friendId) {
     console.log("friendID", friendId);
 
-    setFriend(
-      (prevState) => listOfFriends.filter((friend) => friend.id === friendId)[0]
-    );
+    setFriendId((prevState) => friendId);
     setSplitBill((prevState) => !prevState);
   }
 
@@ -59,6 +57,7 @@ function App() {
   }
 
   console.log("list of friends", listOfFriends);
+  console.log("setFriend", friendId);
 
   return (
     <div className="app">
@@ -70,7 +69,12 @@ function App() {
         />
       </div>
       {splitBill && (
-        <SplitBillForm friendInfo={friend} onSplitBill={handleSplitBill} />
+        <SplitBillForm
+          friendInfo={
+            listOfFriends.filter((friend) => friend.id === friendId)[0]
+          }
+          onSplitBill={handleSplitBill}
+        />
       )}
     </div>
   );
