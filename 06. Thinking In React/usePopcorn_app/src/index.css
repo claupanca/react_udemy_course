@@ -385,11 +385,6 @@ EMPTY STAR
   justify-content: space-between;
 }
 
-.star {
-  width: 2rem;
-  height: 2rem;
-}
-
 .star-count {
   display: flex;
   width: 2rem;

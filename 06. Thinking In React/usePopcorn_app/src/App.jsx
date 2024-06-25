@@ -75,7 +75,13 @@ export default function App() {
       <MainScreen>
         <Box>
           <InitialList movies={tempMovieData} />
-          <UserRating />
+          {/* We have created a HIGHLY reusable and flexible UserRating component with different props for the user */}
+
+          <UserRating maxRating={10} color="red" size="24px" />
+          <UserRating maxRating={5} defaultRating={3} />
+          <UserRating color="pink" size="48px" defaultRating={2} />
+          {/* The next one will throw an error since we are not passing a NUMBER as maxRating, as stated into the UserRating component with propTypes */}
+          {/* <UserRating maxRating={"sss"} color="red" size="24px" /> */}
         </Box>
 
         <Box>

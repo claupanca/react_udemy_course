@@ -1,6 +1,6 @@
-export default function EmptyStar({ index, handleMouse }) {
+export default function EmptyStar({ index, onOver }) {
   function handleMouseEnter() {
-    handleMouse(index + 1);
+    onOver(index + 1);
   }
 
   return (
