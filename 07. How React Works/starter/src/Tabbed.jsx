@@ -16,6 +16,7 @@ export default function Tabbed({ content }) {
         <Tab num={3} activeTab={activeTab} onClick={setActiveTab} />
       </div>
 
+      {/* we have added a Key to the TabContent, so that React will know that each Component in UNIQUE and should trigger a state update */}
       {activeTab <= 2 ? (
         <TabContent key={activeTab} item={content.at(activeTab)} />
       ) : (

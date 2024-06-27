@@ -8,6 +8,38 @@ export default function TabContent({ item }) {
     setLikes(likes + 1);
   }
 
+  function handleSuperInc() {
+    // This WILL NOT WORK
+    //  since it's batching them up and the RERENDER and COMMIT happens only 1 TIME
+    // The STATE Update is ASYNCHRONOUS
+    setLikes(likes + 1);
+    setLikes(likes + 1);
+    setLikes(likes + 1);
+
+    // This will WORK
+    //Since we are passing a CALLBACK function, the RERENDER will happen 3 times
+    setLikes((prevState) => prevState + 1);
+    setLikes((prevState) => prevState + 1);
+    setLikes((prevState) => prevState + 1);
+  }
+
+  function handleUndoButton() {
+    // These 2 state updates are BATCHED --> 1 component RERENDER
+    setShowDetails(true);
+    setLikes(0);
+    // This log will show a 'STALE' state, it's the previous state since the component has not
+    // been Rerendered so the state is not updated
+    console.log(likes);
+  }
+
+  function handleUndoLater() {
+    const x = setTimeout(() => {
+      handleUndoButton();
+    }, 2000);
+  }
+
+  console.log("Render");
+
   return (
     <div className="tab-content">
       <h4>{item.summary}</h4>
@@ -21,13 +53,13 @@ export default function TabContent({ item }) {
         <div className="hearts-counter">
           <span>{likes} ❤️</span>
           <button onClick={handleInc}>+</button>
-          <button>+++</button>
+          <button onClick={handleSuperInc}>+++</button>
         </div>
       </div>
 
       <div className="tab-undo">
-        <button>Undo</button>
-        <button>Undo in 2s</button>
+        <button onClick={handleUndoButton}>Undo</button>
+        <button onClick={handleUndoLater}>Undo in 2s</button>
       </div>
     </div>
   );
