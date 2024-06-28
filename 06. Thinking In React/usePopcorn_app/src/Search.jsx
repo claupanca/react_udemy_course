@@ -1,7 +1,6 @@
 import { useState } from "react";
 
-export default function Search() {
-  const [search, setSearch] = useState("");
+export default function Search({ search, setSearch }) {
   return (
     <input
       className="search"
