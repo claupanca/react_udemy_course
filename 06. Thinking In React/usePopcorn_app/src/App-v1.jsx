@@ -17,6 +17,7 @@ import Summary from "./Summary";
 import UserRating from "./UserRating";
 import Loading from "./Loading";
 import ErrorMessage from "./ErrorMessage";
+import SelectedMovie from "./SelectedMovie";
 
 import API from "../config";
 
@@ -66,10 +67,39 @@ const tempWatchedData = [
     userRating: 9,
   },
 ];
+
+const tempSelectedMovie = {
+  Actors: "Benedict Cumberbatch, Chiwetel Ejiofor, Rachel McAdams",
+  Awards: "Nominated for 1 Oscar. 21 wins & 68 nominations total",
+  BoxOffice: "$232,641,920",
+  Country: "United States",
+  DVD: "N/A",
+  Director: "Scott Derrickson",
+  Genre: "Action, Adventure, Fantasy",
+  Language: "English",
+  Metascore: "72",
+  Plot: "While on a journey of physical and spiritual healing, a brilliant neurosurgeon is drawn into the world of the mystic arts.",
+  Poster:
+    "https://m.media-amazon.com/images/M/MV5BNjgwNzAzNjk1Nl5BMl5BanBnXkFtZTgwMzQ2NjI1OTE@._V1_SX300.jpg",
+  Production: "N/A",
+  Rated: "PG-13",
+
+  Released: "04 Nov 2016",
+  Response: "True",
+  Runtime: "115 min",
+  Title: "Doctor Strange",
+  Type: "movie",
+  Website: "N/A",
+  Writer: "Jon Spaihts, Scott Derrickson, C. Robert Cargill",
+  Year: "2016",
+  imdbID: "tt1211837",
+  imdbRating: "7.5",
+  imdbVotes: "808,973",
+};
 const KEY = API();
 
 export default function App() {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
 
   // we use this state to display a loading Indicator while the data is being fetched
@@ -81,6 +111,9 @@ export default function App() {
   //  we LIFTED the search state so that we can synchronize everything
   const [search, setSearch] = useState("");
 
+  // piece of state when we select a movie
+  const [selectedMovie, setSelectedMovie] = useState(null);
+
   // This will run only at the initial RENDER ([]) and will fetch data
   // useEffect(() => {
   //   fetch(`http://omdbapi.com/?s='strange'&apikey=${KEY}`)
@@ -89,52 +122,97 @@ export default function App() {
   // }, []);
 
   // A async function created out of the promise
-  useEffect(() => {
-    console.log("search", search);
-    async function getMovies() {
-      // we are setting the loading to true
-      try {
-        setLoading(true);
-        setError("");
-        const res = await fetch(
-          `http://omdbapi.com/?s=${search}&apikey=${KEY}`
-        );
+  // useEffect(() => {
+  //   console.log("search", search);
+  //   async function getMovies() {
+  //     // we are setting the loading to true
+  //     try {
+  //       setLoading(true);
+  //       setError("");
+  //       const res = await fetch(
+  //         `http://omdbapi.com/?s=${search}&apikey=${KEY}`
+  //       );
 
-        // we can check if the response is ok or if it's a error
-        if (!res.ok) {
-          throw new Error("Data not available");
-        }
+  //       // we can check if the response is ok or if it's a error
+  //       if (!res.ok) {
+  //         throw new Error("Data not available");
+  //       }
 
-        const data = await res.json();
+  //       const data = await res.json();
 
-        console.log("data", data);
+  //       console.log("data", data);
 
-        // we account if there is no movie returned
-        if (data.Response === "False") {
-          setMovies([]);
-          throw new Error("No movies Available");
-        }
+  //       // we account if there is no movie returned
+  //       if (data.Response === "False") {
+  //         setMovies([]);
+  //         throw new Error("No movies Available");
+  //       }
 
-        setMovies(data.Search);
-        //  we set the Loading to False
-        setLoading(false);
-      } catch (err) {
-        // console.log("error", err);
-        console.log("error message", err.message);
-        setError(err.message);
+  //       setMovies(data.Search);
+  //       //  we set the Loading to False
+  //       setLoading(false);
+  //     } catch (err) {
+  //       // console.log("error", err);
+  //       console.log("error message", err.message);
+  //       setError(err.message);
+  //     }
+  //   }
+
+  //   // if the search length if less than 3, we don't display movies nor error
+  //   if (search.length < 3) {
+  //     setMovies([]);
+  //     setError("");
+  //     return;
+  //   }
+
+  //   getMovies();
+  //   // we are using the dependency Array to monitor the search state
+  // }, [search]);
+
+  function handleSelectMovie(movie) {
+    console.log("THis movie is selected", movie.imdbID);
+
+    async function getSelectedMovie() {
+      const response = await fetch(
+        `http://omdbapi.com/?i=${movie.imdbID}&apikey=b5685a1b`
+      );
+      const data = await response.json();
+      console.log("MOVIEE", data);
+      setSelectedMovie(data);
+    }
+
+    getSelectedMovie();
+  }
+
+  function handleAddWatched(userRating) {
+    console.log(
+      "This is the user rating ",
+      userRating,
+      " for this movie ",
+      selectedMovie
+    );
+
+    setWatched(
+      (prevState) => {
+        if (
+          prevState.filter((item) => item.imdbID === selectedMovie.imdbID)
+            .length > 0
+        ) {
+          return prevState.map((item) =>
+            item.imdbID === selectedMovie.imdbID
+              ? { ...selectedMovie, userRating: userRating }
+              : item
+          );
+        } else
+          return [...prevState, { ...selectedMovie, userRating: userRating }];
       }
-    }
-
-    // if the search length if less than 3, we don't display movies nor error
-    if (search.length < 3) {
-      setMovies([]);
-      setError("");
-      return;
-    }
-
-    getMovies();
-    // we are using the dependency Array to monitor the search state
-  }, [search]);
+      // prevState.map((item) =>
+      //   item.imdbID === selectedMovie.imdbID
+      //     ? { ...selectedMovie, userRating: userRating }
+      //     : item
+      // )
+    );
+  }
 
   return (
     <div className="app">
@@ -150,7 +228,10 @@ export default function App() {
           ) : loading ? (
             <Loading />
           ) : (
-            <InitialList movies={movies} />
+            <InitialList
+              movies={movies}
+              handleSelectMovie={handleSelectMovie}
+            />
           )}
           {/* We have created a HIGHLY reusable and flexible UserRating component with different props for the user */}
           <UserRating maxRating={10} color="red" size="24px" />
@@ -161,8 +242,23 @@ export default function App() {
         </Box>
 
         <Box>
-          <Summary movies={watched} />
-          <WatchList movies={watched} />
+          {selectedMovie ? (
+            <SelectedMovie
+              selectedMovie={selectedMovie}
+              handleBackButton={setSelectedMovie}
+            >
+              <UserRating
+                maxRating={10}
+                defaultRating={selectedMovie.userRating}
+                onSetRating={handleAddWatched}
+              />
+            </SelectedMovie>
+          ) : (
+            <>
+              <Summary movies={watched} />
+              <WatchList movies={watched} />{" "}
+            </>
+          )}
         </Box>
         {/* <InitialBox foundItems={tempMovieData} />
         <WatchBox /> */}

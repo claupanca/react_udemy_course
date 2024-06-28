@@ -20,9 +20,13 @@ export default function UserRating({
   size = "2rem",
   defaultRating = 1,
   // we define a prop so that we can pass a function to access the rating from outside
-  onSetRating,
+  onSetRating = () => console.error("Action not defined"),
 }) {
   const [userRating, setUserRating] = useState(defaultRating);
+
+  function handleSetRating() {
+    onSetRating(userRating);
+  }
 
   return (
     <div className="rating">
@@ -66,7 +70,9 @@ export default function UserRating({
           <h2>{userRating}</h2>
         </div>
       </div>
-      <button className="btn-add">+ Add to list</button>
+      <button className="btn-add" onClick={handleSetRating}>
+        + Add to list
+      </button>
     </div>
   );
 }
