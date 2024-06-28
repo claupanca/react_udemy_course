@@ -76,7 +76,6 @@ export default function App() {
         <Box>
           <InitialList movies={tempMovieData} />
           {/* We have created a HIGHLY reusable and flexible UserRating component with different props for the user */}
-
           <UserRating maxRating={10} color="red" size="24px" />
           <UserRating maxRating={5} defaultRating={3} />
           <UserRating color="pink" size="48px" defaultRating={2} />
