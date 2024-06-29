@@ -68,39 +68,11 @@ const tempWatchedData = [
   },
 ];
 
-const tempSelectedMovie = {
-  Actors: "Benedict Cumberbatch, Chiwetel Ejiofor, Rachel McAdams",
-  Awards: "Nominated for 1 Oscar. 21 wins & 68 nominations total",
-  BoxOffice: "$232,641,920",
-  Country: "United States",
-  DVD: "N/A",
-  Director: "Scott Derrickson",
-  Genre: "Action, Adventure, Fantasy",
-  Language: "English",
-  Metascore: "72",
-  Plot: "While on a journey of physical and spiritual healing, a brilliant neurosurgeon is drawn into the world of the mystic arts.",
-  Poster:
-    "https://m.media-amazon.com/images/M/MV5BNjgwNzAzNjk1Nl5BMl5BanBnXkFtZTgwMzQ2NjI1OTE@._V1_SX300.jpg",
-  Production: "N/A",
-  Rated: "PG-13",
-
-  Released: "04 Nov 2016",
-  Response: "True",
-  Runtime: "115 min",
-  Title: "Doctor Strange",
-  Type: "movie",
-  Website: "N/A",
-  Writer: "Jon Spaihts, Scott Derrickson, C. Robert Cargill",
-  Year: "2016",
-  imdbID: "tt1211837",
-  imdbRating: "7.5",
-  imdbVotes: "808,973",
-};
 const KEY = API();
 
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
 
   // we use this state to display a loading Indicator while the data is being fetched
   const [loading, setLoading] = useState(false);
@@ -121,53 +93,53 @@ export default function App() {
   //     .then((data) => console.log(data.Search));
   // }, []);
 
-  // A async function created out of the promise
-  // useEffect(() => {
-  //   console.log("search", search);
-  //   async function getMovies() {
-  //     // we are setting the loading to true
-  //     try {
-  //       setLoading(true);
-  //       setError("");
-  //       const res = await fetch(
-  //         `http://omdbapi.com/?s=${search}&apikey=${KEY}`
-  //       );
+  //A async function created out of the promise
+  useEffect(() => {
+    console.log("search", search);
+    async function getMovies() {
+      // we are setting the loading to true
+      try {
+        setLoading(true);
+        setError("");
+        const res = await fetch(
+          `http://omdbapi.com/?s=${search}&apikey=${KEY}`
+        );
 
-  //       // we can check if the response is ok or if it's a error
-  //       if (!res.ok) {
-  //         throw new Error("Data not available");
-  //       }
+        // we can check if the response is ok or if it's a error
+        if (!res.ok) {
+          throw new Error("Data not available");
+        }
 
-  //       const data = await res.json();
+        const data = await res.json();
 
-  //       console.log("data", data);
+        console.log("data", data);
 
-  //       // we account if there is no movie returned
-  //       if (data.Response === "False") {
-  //         setMovies([]);
-  //         throw new Error("No movies Available");
-  //       }
+        // we account if there is no movie returned
+        if (data.Response === "False") {
+          setMovies([]);
+          throw new Error("No movies Available");
+        }
 
-  //       setMovies(data.Search);
-  //       //  we set the Loading to False
-  //       setLoading(false);
-  //     } catch (err) {
-  //       // console.log("error", err);
-  //       console.log("error message", err.message);
-  //       setError(err.message);
-  //     }
-  //   }
+        setMovies(data.Search);
+        //  we set the Loading to False
+        setLoading(false);
+      } catch (err) {
+        // console.log("error", err);
+        console.log("error message", err.message);
+        setError(err.message);
+      }
+    }
 
-  //   // if the search length if less than 3, we don't display movies nor error
-  //   if (search.length < 3) {
-  //     setMovies([]);
-  //     setError("");
-  //     return;
-  //   }
+    // if the search length if less than 3, we don't display movies nor error
+    if (search.length < 3) {
+      setMovies([]);
+      setError("");
+      return;
+    }
 
-  //   getMovies();
-  //   // we are using the dependency Array to monitor the search state
-  // }, [search]);
+    getMovies();
+    // we are using the dependency Array to monitor the search state
+  }, [search]);
 
   function handleSelectMovie(movie) {
     console.log("THis movie is selected", movie.imdbID);
@@ -212,6 +184,8 @@ export default function App() {
       //     : item
       // )
     );
+
+    setSelectedMovie(null);
   }
 
   return (

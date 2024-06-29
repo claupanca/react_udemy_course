@@ -6,7 +6,7 @@ export default function WatchedListMovie({ movie }) {
       <div>
         <p>⭐{movie.imdbRating}</p>
         <p>🌟{movie.userRating}</p>
-        <p>⏳ {movie.runtime}</p>
+        <p>⏳ {movie.Runtime}</p>
       </div>
     </li>
   );
