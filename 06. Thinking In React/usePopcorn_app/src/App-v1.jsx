@@ -96,13 +96,21 @@ export default function App() {
   //A async function created out of the promise
   useEffect(() => {
     console.log("search", search);
+
+    //  We createa new Abort Controller to control the fetch requests
+    const controller = new AbortController();
+
     async function getMovies() {
-      // we are setting the loading to true
       try {
+        // we are setting the loading to true
         setLoading(true);
         setError("");
+
+        //  to use the controller, we pass a new param to the Fetch API
+        // signal
         const res = await fetch(
-          `http://omdbapi.com/?s=${search}&apikey=${KEY}`
+          `http://omdbapi.com/?s=${search}&apikey=${KEY}`,
+          { signal: controller.signal }
         );
 
         // we can check if the response is ok or if it's a error
@@ -138,6 +146,14 @@ export default function App() {
     }
 
     getMovies();
+
+    // we are using the Cleanup Function to ABORT THE fetch
+    return () => {
+      // cleanup function that is ABORTING the fetch of data
+      console.log("cleanup running");
+      controller.abort();
+    };
+
     // we are using the dependency Array to monitor the search state
   }, [search]);
 
@@ -146,7 +162,7 @@ export default function App() {
 
     async function getSelectedMovie() {
       const response = await fetch(
-        `http://omdbapi.com/?i=${movie.imdbID}&apikey=b5685a1b`
+        `http://omdbapi.com/?i=${movie.imdbID}&apikey=${KEY}`
       );
       const data = await response.json();
       console.log("MOVIEE", data);
@@ -155,6 +171,14 @@ export default function App() {
 
     getSelectedMovie();
   }
+
+  // we are using this to Change the title of the page
+  // this is a Side Effect so we have to use useEffect to INTERACT with the real world
+  useEffect(() => {
+    document.title = selectedMovie
+      ? `Movie: ${selectedMovie.Title}`
+      : "usePopcorn";
+  }, [selectedMovie]);
 
   function handleAddWatched(userRating) {
     console.log(
@@ -230,7 +254,7 @@ export default function App() {
           ) : (
             <>
               <Summary movies={watched} />
-              <WatchList movies={watched} />{" "}
+              <WatchList movies={watched} />
             </>
           )}
         </Box>
