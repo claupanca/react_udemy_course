@@ -19,7 +19,7 @@ export default function App() {
     async function getCurrencies() {
       try {
         const response = await fetch(
-          "https://api.fxratesapi.com/latest?currencies"
+          `https://api.fxratesapi.com/latest?currencies&base=${from}`
         );
         if (!response.ok) {
           throw new Error("Something went wrong");
@@ -65,8 +65,10 @@ export default function App() {
     console.log("amount", amount);
     console.log("from", from);
     console.log("to", to, initialListOfCurrencies[to]);
-    if (amount !== "") {
-      setResult((Number(amount) * initialListOfCurrencies[to]).toFixed(2));
+    if (initialListOfCurrencies[to]) {
+      setResult((prevState) =>
+        (amount * initialListOfCurrencies[to]).toFixed(2)
+      );
     }
   }, [amount, from, to]);
 
