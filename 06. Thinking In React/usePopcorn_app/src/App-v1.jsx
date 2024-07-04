@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Navbar from "./Navbar";
 import MainScreen from "./MainScreen";
 
@@ -70,9 +70,18 @@ const tempWatchedData = [
 
 const KEY = API();
 
+function getWatched() {
+  console.log("aaaa", sessionStorage.getItem("watched"));
+  return sessionStorage.getItem("watched")
+    ? JSON.parse(sessionStorage.getItem("watched"))
+    : [];
+}
+
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+
+  // we use a CALLBACK to get the watched data from Storage, on the INITIAL RENDER
+  const [watched, setWatched] = useState(() => getWatched());
 
   // we use this state to display a loading Indicator while the data is being fetched
   const [loading, setLoading] = useState(false);
@@ -86,6 +95,14 @@ export default function App() {
   // piece of state when we select a movie
   const [selectedMovie, setSelectedMovie] = useState(null);
 
+  //  ref has been lifted up from Search Component
+  const input = useRef(null);
+
+  // let's say we want to COUNT how many times the user selects a rating
+  // this will be stored in the backend but not showed on front end
+  // so we are not using a state
+  const ratingCount = useRef([]);
+
   // This will run only at the initial RENDER ([]) and will fetch data
   // useEffect(() => {
   //   fetch(`http://omdbapi.com/?s='strange'&apikey=${KEY}`)
@@ -93,7 +110,7 @@ export default function App() {
   //     .then((data) => console.log(data.Search));
   // }, []);
 
-  //A async function created out of the promise
+  //An async function created out of the before promise
   useEffect(() => {
     console.log("search", search);
 
@@ -188,6 +205,28 @@ export default function App() {
       selectedMovie
     );
 
+    //  we are going to update the ratingCount REF here
+    // console.log("rating count", ratingCount);
+    if (
+      ratingCount.current.filter((item) => item.id === userRating).length > 0
+    ) {
+      ratingCount.current = ratingCount.current.map((item) => {
+        // console.log("id", item.id === userRating);
+        // console.log("item", item);
+        if (item.id === userRating) {
+          // console.log("we are here", item.count + 1);
+          // console.log({ ...item, count: item.count + 1 });
+          return { ...item, count: item.count + 1 };
+        } else return item;
+      });
+    } else {
+      console.log("we are here 1");
+      ratingCount.current = [
+        ...ratingCount.current,
+        { id: userRating, count: 1 },
+      ];
+    }
+
     setWatched(
       (prevState) => {
         if (
@@ -212,11 +251,36 @@ export default function App() {
     setSelectedMovie(null);
   }
 
+  //  store the Watched data into the Storage everytime the watched piece of state is Updated
+  useEffect(() => {
+    sessionStorage.setItem("watched", JSON.stringify(watched));
+  }, [watched]);
+
+  // we use the useEffect to set a Listener on the document
+  useEffect(() => {
+    function handleEnterKey(e) {
+      // console.log("A key has been pressed", e);
+      if (e.keyCode === 13) {
+        console.log("Enter has been pressed");
+        // we are using this REF to pass the focus() on the search element
+        input.current.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleEnterKey);
+
+    // We have to CLEANUP THE EVENT LISTENER
+    // since this will run on every rerender
+    return function cleanup() {
+      document.removeEventListener("keydown", handleEnterKey);
+    };
+  }, []);
+
   return (
     <div className="app">
       <Navbar>
         <Logo />
-        <Search search={search} setSearch={setSearch} />
+        <Search search={search} setSearch={setSearch} inputElement={input} />
         <FoundItems movies={movies} />
       </Navbar>
       <MainScreen>
