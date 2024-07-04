@@ -70,7 +70,7 @@ export default function App() {
         (amount * initialListOfCurrencies[to]).toFixed(2)
       );
     }
-  }, [amount, from, to]);
+  }, [amount, from, to, initialListOfCurrencies]);
 
   return (
     <div className="container">
