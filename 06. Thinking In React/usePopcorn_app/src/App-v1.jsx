@@ -20,6 +20,9 @@ import ErrorMessage from "./ErrorMessage";
 import SelectedMovie from "./SelectedMovie";
 
 import API from "../config";
+import useMovies from "./useMovies";
+import useSessionStorage from "./useSessionStorage";
+import useKey from "./useKey";
 
 const tempMovieData = [
   {
@@ -70,24 +73,27 @@ const tempWatchedData = [
 
 const KEY = API();
 
-function getWatched() {
-  console.log("aaaa", sessionStorage.getItem("watched"));
-  return sessionStorage.getItem("watched")
-    ? JSON.parse(sessionStorage.getItem("watched"))
-    : [];
-}
-
 export default function App() {
-  const [movies, setMovies] = useState([]);
+  //
 
+  //
+
+  // Commented state is extracted into the useMovies custom Hook
+
+  // const [movies, setMovies] = useState([]);
+
+  // Extracted into useSessionStorage custom Hook
   // we use a CALLBACK to get the watched data from Storage, on the INITIAL RENDER
-  const [watched, setWatched] = useState(() => getWatched());
+  // const [watched, setWatched] = useState(() => getWatched());
+
+  // call the custom hook
+  const [watched, setWatched] = useSessionStorage([]);
 
   // we use this state to display a loading Indicator while the data is being fetched
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   // we use another piece of state to store the error message
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
 
   //  we LIFTED the search state so that we can synchronize everything
   const [search, setSearch] = useState("");
@@ -95,8 +101,12 @@ export default function App() {
   // piece of state when we select a movie
   const [selectedMovie, setSelectedMovie] = useState(null);
 
+  // Extracted into the useKey custom hook
   //  ref has been lifted up from Search Component
-  const input = useRef(null);
+  // const input = useRef(null);
+
+  //  call the cusom hook with the keyCode = 13 (Enter)
+  const input = useKey(13);
 
   // let's say we want to COUNT how many times the user selects a rating
   // this will be stored in the backend but not showed on front end
@@ -110,69 +120,82 @@ export default function App() {
   //     .then((data) => console.log(data.Search));
   // }, []);
 
-  //An async function created out of the before promise
-  useEffect(() => {
-    console.log("search", search);
+  //
 
-    //  We createa new Abort Controller to control the fetch requests
-    const controller = new AbortController();
+  //
 
-    async function getMovies() {
-      try {
-        // we are setting the loading to true
-        setLoading(true);
-        setError("");
+  //
 
-        //  to use the controller, we pass a new param to the Fetch API
-        // signal
-        const res = await fetch(
-          `http://omdbapi.com/?s=${search}&apikey=${KEY}`,
-          { signal: controller.signal }
-        );
+  // WE HAVE EXTRACTED THIS INTO THE useMOVIES custom HOOK
+  // //An async function created out of the before promise
+  // useEffect(() => {
+  //   console.log("search", search);
 
-        // we can check if the response is ok or if it's a error
-        if (!res.ok) {
-          throw new Error("Data not available");
-        }
+  //   //  We createa new Abort Controller to control the fetch requests
+  //   const controller = new AbortController();
 
-        const data = await res.json();
+  //   async function getMovies() {
+  //     try {
+  //       // we are setting the loading to true
+  //       setLoading(true);
+  //       setError("");
 
-        console.log("data", data);
+  //       //  to use the controller, we pass a new param to the Fetch API
+  //       // signal
+  //       const res = await fetch(
+  //         `http://omdbapi.com/?s=${search}&apikey=${KEY}`,
+  //         { signal: controller.signal }
+  //       );
 
-        // we account if there is no movie returned
-        if (data.Response === "False") {
-          setMovies([]);
-          throw new Error("No movies Available");
-        }
+  //       // we can check if the response is ok or if it's a error
+  //       if (!res.ok) {
+  //         throw new Error("Data not available");
+  //       }
 
-        setMovies(data.Search);
-        //  we set the Loading to False
-        setLoading(false);
-      } catch (err) {
-        // console.log("error", err);
-        console.log("error message", err.message);
-        setError(err.message);
-      }
-    }
+  //       const data = await res.json();
 
-    // if the search length if less than 3, we don't display movies nor error
-    if (search.length < 3) {
-      setMovies([]);
-      setError("");
-      return;
-    }
+  //       console.log("data", data);
 
-    getMovies();
+  //       // we account if there is no movie returned
+  //       if (data.Response === "False") {
+  //         setMovies([]);
+  //         throw new Error("No movies Available");
+  //       }
 
-    // we are using the Cleanup Function to ABORT THE fetch
-    return () => {
-      // cleanup function that is ABORTING the fetch of data
-      console.log("cleanup running");
-      controller.abort();
-    };
+  //       setMovies(data.Search);
+  //       //  we set the Loading to False
+  //       setLoading(false);
+  //     } catch (err) {
+  //       // console.log("error", err);
+  //       console.log("error message", err.message);
+  //       setError(err.message);
+  //     }
+  //   }
 
-    // we are using the dependency Array to monitor the search state
-  }, [search]);
+  //   // if the search length if less than 3, we don't display movies nor error
+  //   if (search.length < 3) {
+  //     setMovies([]);
+  //     setError("");
+  //     return;
+  //   }
+
+  //   getMovies();
+
+  //   // we are using the Cleanup Function to ABORT THE fetch
+  //   return () => {
+  //     // cleanup function that is ABORTING the fetch of data
+  //     console.log("cleanup running");
+  //     controller.abort();
+  //   };
+
+  //   // we are using the dependency Array to monitor the search state
+  // }, [search]);
+
+  //
+
+  // Use the Custom Hook - useMovies
+  // this hook return 3 items
+  const { movies, loading, error } = useMovies(search, KEY);
 
   function handleSelectMovie(movie) {
     console.log("THis movie is selected", movie.imdbID);
@@ -251,30 +274,32 @@ export default function App() {
     setSelectedMovie(null);
   }
 
-  //  store the Watched data into the Storage everytime the watched piece of state is Updated
-  useEffect(() => {
-    sessionStorage.setItem("watched", JSON.stringify(watched));
-  }, [watched]);
+  //  Extracted into Custom Hook - useSessionStorage
+  // //  store the Watched data into the Storage everytime the watched piece of state is Updated
+  // useEffect(() => {
+  //   sessionStorage.setItem("watched", JSON.stringify(watched));
+  // }, [watched]);
 
+  // extreacted into the useKey custom hook
   // we use the useEffect to set a Listener on the document
-  useEffect(() => {
-    function handleEnterKey(e) {
-      // console.log("A key has been pressed", e);
-      if (e.keyCode === 13) {
-        console.log("Enter has been pressed");
-        // we are using this REF to pass the focus() on the search element
-        input.current.focus();
-      }
-    }
+  // useEffect(() => {
+  //   function handleEnterKey(e) {
+  //     // console.log("A key has been pressed", e);
+  //     if (e.keyCode === 13) {
+  //       console.log("Enter has been pressed");
+  //       // we are using this REF to pass the focus() on the search element
+  //       input.current.focus();
+  //     }
+  //   }
 
-    document.addEventListener("keydown", handleEnterKey);
+  //   document.addEventListener("keydown", handleEnterKey);
 
-    // We have to CLEANUP THE EVENT LISTENER
-    // since this will run on every rerender
-    return function cleanup() {
-      document.removeEventListener("keydown", handleEnterKey);
-    };
-  }, []);
+  //   // We have to CLEANUP THE EVENT LISTENER
+  //   // since this will run on every rerender
+  //   return function cleanup() {
+  //     document.removeEventListener("keydown", handleEnterKey);
+  //   };
+  // }, []);
 
   return (
     <div className="app">
