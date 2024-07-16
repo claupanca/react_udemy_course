@@ -1,7 +1,6 @@
-import questions from "./assets/questions.json";
 import Question from "./Question";
 
-export default function Questions() {
+export default function Questions({ questions }) {
   console.log(questions);
   return (
     <div>
