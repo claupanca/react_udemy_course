@@ -1,14 +1,11 @@
 import { useState, useRef } from "react";
 
-import ProgressBar from "./ProgressBar";
-import Question from "./Question";
-import Timer from "./Timer";
-
-import tempQuestions from "./assets/questions.json";
+import tempQuestions from "../assets/questions.json";
 
 const questions = tempQuestions.questions;
 
 export default function Body({ children }) {
+  const [welcome, setWelcome] = useState(true);
   const [question, setQuestion] = useState(questions[0]);
   const [selected, setSelected] = useState(null);
 
@@ -19,6 +16,10 @@ export default function Body({ children }) {
   let points = useRef(0);
 
   let start = useRef("");
+
+  function handleStartClick() {
+    setWelcome((prevState) => !prevState);
+  }
 
   function handleNextClick() {
     start.current = "start";
@@ -32,22 +33,5 @@ export default function Body({ children }) {
     setSelected(null);
   }
 
-  return (
-    <div className="main">
-      <ProgressBar
-        questions={questions.length}
-        current={counter.current + 1}
-        points={points.current}
-        total={total}
-      />
-      <Question
-        question={question}
-        onNextClick={handleNextClick}
-        answer={answer}
-        selected={selected}
-        onItemClick={setSelected}
-      />
-      {children}
-    </div>
-  );
+  return <main className="main">{children}</main>;
 }
