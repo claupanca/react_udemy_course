@@ -18,7 +18,10 @@ const initialState = {
   current: 0,
   answer: null,
   points: 0,
+  secondsRemaining: 0,
 };
+
+const SECS_PER_QUESTION = 30;
 
 // We are using the useReducer reducer function for state management
 function reducer(currState, action) {
@@ -40,6 +43,8 @@ function reducer(currState, action) {
       return {
         ...currState,
         status: "active",
+        // we compute the amount of time based on the number of questions
+        secondsRemaining: currState.questions.length * SECS_PER_QUESTION,
       };
     case "newAnswer":
       const currentQuestion = currState.questions[currState.current];
@@ -66,6 +71,13 @@ function reducer(currState, action) {
         current: 0,
         answer: null,
         points: 0,
+        secondsRemaining: 10,
+      };
+    case "timer":
+      return {
+        ...currState,
+        secondsRemaining: currState.secondsRemaining - 1,
+        status: currState.secondsRemaining - 1 == 0 ? "finished" : "active",
       };
     default:
       return { ...currState };
@@ -77,12 +89,11 @@ export default function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { questions, status, current, answer, points } = state;
+  const { questions, status, current, answer, points, secondsRemaining } =
+    state;
 
   const numberOfQuestions = questions.length;
   const maxPoints = questions.reduce((acc, item) => acc + item.points, 0);
-
-  // console.log("questions", questions);
 
   // Fetch the questions from the json-server (fake api)
   useEffect(() => {
@@ -108,7 +119,7 @@ export default function App() {
     }
 
     getQuestions();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="app">
@@ -137,7 +148,7 @@ export default function App() {
               current={current}
               numberOfQuestions={numberOfQuestions}
             />
-            <Timer />
+            <Timer time={secondsRemaining} dispatch={dispatch} />
           </>
         )}
         {status === "finished" && (
