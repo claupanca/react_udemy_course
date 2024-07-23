@@ -1,7 +1,17 @@
 .nav {
-  background-color: antiquewhite;
+  background-color: none;
 
-  padding: 2rem;
+  padding: 2.5rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo_img {
+  /* width: auto;
+  height: auto; */
+  width: 15rem;
 }
 
 .ul {
@@ -10,13 +20,16 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  gap: 2rem;
 
-  font-size: 3rem;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .nav_link:link,
 .nav_link:visited {
   text-decoration: none;
+  color: white;
 }
 
 .nav_link:hover,
@@ -25,6 +38,6 @@
   color: red;
 }
 
-.nav_link .active {
-  color: brown;
+.nav :global(.active) {
+  color: green;
 }

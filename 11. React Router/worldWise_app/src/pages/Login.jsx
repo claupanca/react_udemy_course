@@ -1,9 +1,9 @@
 import PageNav from "../components/PageNav";
 
-export default function Pricing() {
+export default function Login() {
   return (
     <div>
-      <h2>Pricing Page</h2>
+      <h1>Login</h1>
     </div>
   );
 }
