@@ -1,0 +1,30 @@
+.nav {
+  background-color: antiquewhite;
+
+  padding: 2rem;
+}
+
+.ul {
+  list-style-type: none;
+
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  font-size: 3rem;
+}
+
+.nav_link:link,
+.nav_link:visited {
+  text-decoration: none;
+}
+
+.nav_link:hover,
+.nav_link:active {
+  text-decoration: none;
+  color: red;
+}
+
+.nav_link .active {
+  color: brown;
+}
