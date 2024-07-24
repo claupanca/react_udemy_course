@@ -1,3 +1,7 @@
 export default function PageNotFound() {
-  return <h2>Page not Found</h2>;
+  return (
+    <div>
+      <h1>Page not found 😢</h1>
+    </div>
+  );
 }
