@@ -1,5 +1,5 @@
 import { useReducer, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Product from "./pages/Product";
 import Pricing from "./pages/Pricing";
@@ -73,7 +73,7 @@ function App() {
           <Route path="pricing" element={<Pricing />} />
           <Route path="login" element={<Login />} />
           <Route path="app" element={<AppLayout />}>
-            <Route index element={<CityList cities={cities} />} />
+            <Route index element={<Navigate replace to={"cities"} />} />
             <Route path="cities" element={<CityList cities={cities} />} />
             {/* ROUTE for PARAM  */}
             <Route path="cities/:id" element={<City />} />

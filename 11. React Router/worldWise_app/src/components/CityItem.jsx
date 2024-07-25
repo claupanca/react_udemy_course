@@ -3,16 +3,21 @@ import { Link } from "react-router-dom";
 import styles from "./CityItem.module.css";
 
 export default function CityItem({ city }) {
+  const { cityName, emoji, date, id, position } = city;
+
   return (
     <li>
-      <Link to={`${city.id}`} className={styles.cityItem}>
+      <Link
+        to={`${id}?lat=${position.lat}&lng=${position.lng}`}
+        className={styles.cityItem}
+      >
         <div className={styles.title}>
-          <div className={styles.emoji}>{city.emoji}</div>
-          <div className={styles.name}>{city.cityName}</div>
+          <div className={styles.emoji}>{emoji}</div>
+          <div className={styles.name}>{cityName}</div>
         </div>
         <div className={styles.details}>
           <div className={styles.date}>
-            {new Date(city.date).toLocaleDateString()}
+            {new Date(date).toLocaleDateString()}
           </div>
           <button className={styles.deleteBtn}>
             <svg
