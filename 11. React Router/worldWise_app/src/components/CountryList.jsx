@@ -2,8 +2,10 @@ import styles from "./CountryList.module.css";
 
 import CountryItem from "./CountryItem";
 import Message from "./Message";
+import { useCities } from "../context/CitiesContext";
 
-export default function CountryList({ cities }) {
+export default function CountryList() {
+  const { cities } = useCities();
   const countries = Array.from(new Set(cities.map((item) => item.country)));
 
   return (

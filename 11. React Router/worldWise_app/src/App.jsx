@@ -1,4 +1,3 @@
-import { useReducer, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Product from "./pages/Product";
@@ -14,74 +13,32 @@ import Form from "./components/Form";
 import Spinner from "./components/Spinner";
 import SpinnerFullPage from "./components/SpinnerFullPage";
 import City from "./components/City";
-
-const initialState = {
-  // loading, ready
-  status: "loading",
-  cities: [],
-  countries: [],
-};
-
-function reducer(currState, action) {
-  switch (action.type) {
-    case "loading":
-      return { ...currState, status: "loading" };
-    case "receivedData":
-      return {
-        ...currState,
-        status: "ready",
-        cities: action.payload,
-      };
-  }
-}
+import { CitiesProvider, useCities } from "./context/CitiesContext";
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const { status, cities } = state;
-
-  useEffect(() => {
-    async function getData() {
-      dispatch({ type: "loading" });
-      try {
-        const response = await fetch("http://localhost:3000/cities");
-
-        if (!response.ok) {
-          throw new Error("Something went wrong");
-        }
-
-        const data = await response.json();
-        dispatch({ type: "receivedData", payload: data });
-      } catch (err) {
-        console.log("error: ", err.message);
-      }
-    }
-
-    getData();
-  }, []);
-
   return (
     <div className="app">
-      <BrowserRouter>
-        <Routes>
-          <Route path="*" element={<PageNotFound />} />
-          <Route
-            index
-            element={status == "loading" ? <Spinner /> : <Homepage />}
-          />
-          <Route path="product" element={<Product />} />
-          <Route path="pricing" element={<Pricing />} />
-          <Route path="login" element={<Login />} />
-          <Route path="app" element={<AppLayout />}>
-            <Route index element={<Navigate replace to={"cities"} />} />
-            <Route path="cities" element={<CityList cities={cities} />} />
-            {/* ROUTE for PARAM  */}
-            <Route path="cities/:id" element={<City />} />
-            <Route path="countries" element={<CountryList cities={cities} />} />
-            <Route path="form" element={<Form />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <CitiesProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="*" element={<PageNotFound />} />
+            <Route index element={<Homepage />} />
+            <Route path="product" element={<Product />} />
+            <Route path="pricing" element={<Pricing />} />
+            <Route path="login" element={<Login />} />
+
+            <Route path="app" element={<AppLayout />}>
+              \{/* Nested routes --> Using <OUTLET /> */}
+              <Route index element={<Navigate replace to={"cities"} />} />
+              <Route path="cities" element={<CityList />} />
+              {/* ROUTE for PARAM  */}
+              <Route path="cities/:id" element={<City />} />
+              <Route path="countries" element={<CountryList />} />
+              <Route path="form" element={<Form />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </CitiesProvider>
     </div>
   );
 }
