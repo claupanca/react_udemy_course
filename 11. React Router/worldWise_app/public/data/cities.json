@@ -1,0 +1,16 @@
+{
+  "cities": [
+    {
+      "id": "5de4",
+      "cityName": "Galveias",
+      "country": "Portugal",
+      "emoji": "PT",
+      "date": "2024-07-31T14:38:50.699Z",
+      "notes": "Test",
+      "position": {
+        "lat": "39.16414104768742",
+        "lng": "-7.998046875000001"
+      }
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+// import { create } from "json-server";
 import { createContext, useContext, useReducer } from "react";
 import { useEffect } from "react";
 
@@ -18,6 +19,19 @@ function reducer(currState, action) {
       return {
         ...currState,
         currentCity: action.payload,
+      };
+    case "createCity":
+      console.log("add");
+      return {
+        ...currState,
+        cities: [...currState.cities, action.payload],
+      };
+    case "deleteCity":
+      return {
+        ...currState,
+        cities: [
+          ...currState.cities.filter((item) => item.id != action.payload),
+        ],
       };
   }
 }
@@ -40,7 +54,7 @@ function CitiesProvider({ children }) {
     async function getData() {
       dispatch({ type: "loading" });
       try {
-        const response = await fetch("http://localhost:3000/cities");
+        const response = await fetch("http://localhost:8000/cities");
 
         if (!response.ok) {
           throw new Error("Something went wrong");
@@ -58,7 +72,7 @@ function CitiesProvider({ children }) {
 
   async function getCity(id) {
     try {
-      const response = await fetch(`http://localhost:3000/cities/${id}`);
+      const response = await fetch(`http://localhost:8000/cities/${id}`);
 
       if (!response.ok) {
         throw new Error("Something went wrong");
@@ -71,6 +85,39 @@ function CitiesProvider({ children }) {
     }
   }
 
+  async function createCity(newCity) {
+    try {
+      const res = await fetch(`http://localhost:8000/cities`, {
+        method: "POST",
+        body: JSON.stringify(newCity),
+        headers: {
+          "Content-Type": "application/json",
+          // "Content-Security-Policy": "default-src self",
+        },
+      });
+      const data = await res.json();
+      console.log("data from context", data);
+      dispatch({ type: "createCity", payload: data });
+    } catch (err) {
+      console.log("error", err.message);
+    }
+  }
+
+  async function deleteCity(id) {
+    try {
+      const res = await fetch(`http://localhost:8000/cities/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      dispatch({ type: "deleteCity", payload: id });
+    } catch (err) {
+      console.log("error", err.message);
+    }
+  }
+
   return (
     <CitiesContext.Provider
       value={{
@@ -78,6 +125,8 @@ function CitiesProvider({ children }) {
         cities: cities,
         currentCity: currentCity,
         getCity: getCity,
+        createCity: createCity,
+        deleteCity: deleteCity,
       }}
     >
       {children}

@@ -3,26 +3,44 @@ import styles from "./Map.module.css";
 
 // leaflet imports
 import { useEffect, useRef, useState } from "react";
-import { MapContainer, Popup, TileLayer, Marker } from "react-leaflet";
+import {
+  MapContainer,
+  Popup,
+  TileLayer,
+  Marker,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 import { useCities } from "../context/CitiesContext";
 
 export default function Map() {
   const [urlState, setUrlState] = useSearchParams();
+
+  const mapLat = urlState.get("lat");
+  const mapLng = urlState.get("lng");
+
   const [mapPosition, setMapPosition] = useState([
     38.727881642324164, -9.140900099907554,
   ]);
 
   useEffect(() => {
-    const latitude = Number(urlState.get("lat")).toFixed(4);
-    console.log("latitude", latitude);
-    const longitude = Number(urlState.get("lng")).toFixed(4);
+    if (mapLat && mapLng) setMapPosition([mapLat, mapLng]);
+  }, [mapLat, mapLng]);
 
-    setMapPosition([latitude, longitude]);
-  }, [urlState]);
+  // useEffect(() => {
+  //   const latitude = Number(urlState.get("lat")).toFixed(4);
+  //   console.log("latitude", latitude);
+  //   const longitude = Number(urlState.get("lng")).toFixed(4);
 
-  const navigate = useNavigate();
+  //   if (latitude === "0.0000" && longitude === "0.0000") {
+  //     setMapPosition(["52", "13"]);
+  //   } else {
+  //     setMapPosition([latitude, longitude]);
+  //   }
+  // }, [urlState]);
+
   const { cities } = useCities();
 
   // console.log("urlState", urlState);
@@ -35,16 +53,16 @@ export default function Map() {
   // const longitude = -0.09;
   // };
 
-  // console.log("mapPosition", mapPosition);
+  console.log("mapPosition", mapPosition);
 
   return (
-    <section className={styles.mapContainer} onClick={() => navigate("form")}>
-      <h1>lat = {(mapPosition[0], mapPosition[1])} </h1>
+    <section className={styles.mapContainer}>
+      <h1>lat = {mapPosition} </h1>
       {/* <h1>longitude = {longitude}</h1> */}
 
       <MapContainer
         center={mapPosition}
-        zoom={13}
+        zoom={6}
         ref={mapRef}
         // style={{ height: "100vh", width: "100vw" }}
         className={styles.map}
@@ -63,7 +81,39 @@ export default function Map() {
         {/* <Marker position={mapPosition}>
           <Popup>A pretty CSS3popup</Popup>
         {/* </Marker> */}
+
+        {/* use this to change the mapPosition according to the lat lng */}
+        <ChangeCenter position={mapPosition} />
+
+        {/* detect the click on the map */}
+        <DetectClick />
       </MapContainer>
     </section>
   );
+}
+
+// to change the map position, we need to create a component on our own
+// since the center property of the map is not REACTIVE
+function ChangeCenter({ position }) {
+  // we use the useMap() hook to get the current instance of the MAP ELEMENT
+  const myMap = useMap();
+  console.log("myMap", myMap);
+  myMap.setView(position);
+
+  // we return null
+  return null;
+}
+
+//  we create a new Component to open the FORM when we click on the map
+function DetectClick() {
+  //  we use the navigate hook to navigate programatically to the form
+  const navigate = useNavigate();
+
+  // we use the useMapEvents hook from Leaflet
+  useMapEvents({
+    // we will store the state of the clicked position in the URL
+    // like this we can access it into the FORM
+    click: (e) => navigate(`form/?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
+    // click: (e) => console.log("eee", e),
+  });
 }
