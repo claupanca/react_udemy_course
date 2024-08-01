@@ -2,8 +2,11 @@ import { NavLink } from "react-router-dom";
 
 import styles from "./PageNav.module.css";
 import Logo from "./Logo";
+import { useLogin } from "../context/LoginConext";
 
 export default function PageNav() {
+  const { isAuth } = useLogin();
+
   return (
     <nav className={styles.nav}>
       <Logo />
@@ -21,7 +24,7 @@ export default function PageNav() {
         </li>
         <li>
           {/* className in the global index.css -- that's why we are not using {styles.}*/}
-          <NavLink className="cta" to="/login">
+          <NavLink className="cta" to={isAuth ? "/app" : "/login"}>
             LOG IN
           </NavLink>
         </li>

@@ -3,8 +3,12 @@ import Navigation from "../components/PageNav";
 import PageNav from "../components/PageNav";
 
 import styles from "./Homepage.module.css";
+import { useLogin } from "../context/LoginConext";
 
 export default function Homepage() {
+  // we access the login provider to get the status of the login
+  const { isAuth } = useLogin();
+
   return (
     <div>
       <PageNav />
@@ -16,7 +20,11 @@ export default function Homepage() {
           of. never forget your wonderful experiences, and show your friends how
           you have wandered the world
         </h3>
-        <NavLink className="cta" to="/app">
+        <NavLink
+          className="cta"
+          // if not logged in, we dispaly the login form. Else - app
+          to={`${isAuth ? "/app" : "/login"}`}
+        >
           Start Tracking Now
         </NavLink>
       </div>

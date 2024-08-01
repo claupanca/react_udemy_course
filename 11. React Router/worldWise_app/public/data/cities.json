@@ -1,15 +1,15 @@
 {
   "cities": [
     {
-      "id": "5de4",
-      "cityName": "Galveias",
+      "id": "1d8d",
+      "cityName": "Santo Antonio da Charneca",
       "country": "Portugal",
       "emoji": "PT",
-      "date": "2024-07-31T14:38:50.699Z",
-      "notes": "Test",
+      "date": "2024-08-01T09:54:36.875Z",
+      "notes": "Amazing",
       "position": {
-        "lat": "39.16414104768742",
-        "lng": "-7.998046875000001"
+        "lat": "38.634036452919226",
+        "lng": "-9.035070697511085"
       }
     }
   ]
