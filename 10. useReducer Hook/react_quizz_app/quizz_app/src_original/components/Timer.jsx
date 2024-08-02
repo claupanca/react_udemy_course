@@ -1,12 +1,9 @@
 import { useEffect } from "react";
-import { useQuizz } from "../context/QuizzContext";
 
-export default function Timer() {
-  const { secondsRemaining, dispatch } = useQuizz();
-
+export default function Timer({ time, dispatch }) {
   //  we are going to initialize the timer as the component mounts
   useEffect(() => {
-    console.log("Timer");
+    console.log("TImer");
     const interval = function () {
       dispatch({ type: "timer" });
     };
@@ -17,8 +14,8 @@ export default function Timer() {
     return () => clearInterval(id);
   }, [dispatch]);
 
-  const minutes = Math.floor(secondsRemaining / 60);
-  const seconds = secondsRemaining - Math.floor(secondsRemaining / 60) * 60;
+  const minutes = Math.floor(time / 60);
+  const seconds = time - Math.floor(time / 60) * 60;
 
   return (
     <div className="timer">

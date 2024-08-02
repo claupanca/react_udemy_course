@@ -1,16 +1,20 @@
+import { useState, useEffect } from "react";
+
 import Options from "./Options";
-import { useQuizz } from "../context/QuizzContext";
 
-export default function Question() {
-  const { questions, dispatch, current, answer } = useQuizz();
-
-  const question = questions[current];
-  const lastQuestion = current === questions.length - 1;
+export default function Question({
+  question,
+  dispatch,
+  answer,
+  current,
+  numberOfQuestions,
+}) {
+  const lastQuestion = current === numberOfQuestions - 1;
 
   return (
     <div>
       <h4>{question.question}</h4>
-      <Options />
+      <Options question={question} dispatch={dispatch} answer={answer} />
 
       {/* if the last question is displayed, we don't show the Next button */}
       {!lastQuestion

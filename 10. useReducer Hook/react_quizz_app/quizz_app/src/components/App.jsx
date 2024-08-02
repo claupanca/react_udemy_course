@@ -1,5 +1,3 @@
-import { useEffect, useState, useReducer, act } from "react";
-
 import Body from "./Body";
 import Header from "./Header";
 import Welcome from "./Welcome";
@@ -10,116 +8,10 @@ import Loader from "./Loader";
 import Error from "./Error";
 import Finished from "./Finished";
 
-const initialState = {
-  questions: [],
-  // states of the game:
-  // loading, error, ready, active, finished
-  status: "loading",
-  current: 0,
-  answer: null,
-  points: 0,
-  secondsRemaining: 0,
-};
-
-const SECS_PER_QUESTION = 30;
-
-// We are using the useReducer reducer function for state management
-function reducer(currState, action) {
-  console.log("currState", currState);
-  console.log("action", action);
-
-  // setting up Switch cases for each dispatched action
-  switch (action.type) {
-    case "setQuestions":
-      return {
-        ...currState,
-        questions: action.payload,
-        // we also set the status here, after the data is recieved
-        status: "ready",
-      };
-    case "dataError":
-      return { ...currState, status: "error" };
-    case "startQuizz":
-      return {
-        ...currState,
-        status: "active",
-        // we compute the amount of time based on the number of questions
-        secondsRemaining: currState.questions.length * SECS_PER_QUESTION,
-      };
-    case "newAnswer":
-      const currentQuestion = currState.questions[currState.current];
-      const correctOption = currentQuestion.correctOption;
-      const isAnswerCorrect = action.payload === correctOption;
-
-      return {
-        ...currState,
-        answer: action.payload,
-        points: isAnswerCorrect
-          ? currState.points + currentQuestion.points
-          : currState.points,
-      };
-
-    case "nextQuestion":
-      return { ...currState, current: currState.current + 1, answer: null };
-
-    case "stopQuizz":
-      return { ...currState, status: "finished" };
-    case "restart":
-      return {
-        ...currState,
-        status: "ready",
-        current: 0,
-        answer: null,
-        points: 0,
-        secondsRemaining: 10,
-      };
-    case "timer":
-      return {
-        ...currState,
-        secondsRemaining: currState.secondsRemaining - 1,
-        status: currState.secondsRemaining - 1 == 0 ? "finished" : "active",
-      };
-    default:
-      return { ...currState };
-  }
-}
+import { useQuizz } from "../context/QuizzContext";
 
 export default function App() {
-  // const [question, setQuestions] = useState({});
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const { questions, status, current, answer, points, secondsRemaining } =
-    state;
-
-  const numberOfQuestions = questions.length;
-  const maxPoints = questions.reduce((acc, item) => acc + item.points, 0);
-
-  // Fetch the questions from the json-server (fake api)
-  useEffect(() => {
-    dispatch({ type: "setStatus", payload: "loading" });
-    async function getQuestions() {
-      try {
-        const res = await fetch("http://localhost:3000/questions");
-
-        if (!res.ok) {
-          dispatch({ type: "dataError" });
-          throw new Error("Failed to Fetch data");
-        }
-
-        const data = await res.json();
-        console.log("data", data);
-        // dispatch({ type: "setStatus", payload: "ready" });
-        //instead of dispatching 2 action, we dispatch just the setQuestions and set the status in the reducer
-        dispatch({ type: "setQuestions", payload: data });
-      } catch (error) {
-        dispatch({ type: "dataError" });
-        console.log(error.message);
-      }
-    }
-
-    getQuestions();
-  }, [dispatch]);
+  const { status } = useQuizz();
 
   return (
     <div className="app">
@@ -127,33 +19,15 @@ export default function App() {
       <Body>
         {status === "loading" && <Loader />}
         {status === "error" && <Error />}
-        {status === "ready" && (
-          <Welcome
-            numberOfQuestions={numberOfQuestions}
-            onStartClick={() => dispatch({ type: "startQuizz" })}
-          />
-        )}
+        {status === "ready" && <Welcome />}
         {status === "active" && (
           <>
-            <ProgressBar
-              numberOfQuestions={numberOfQuestions}
-              points={points}
-              current={current + 1}
-              total={maxPoints}
-            />
-            <Question
-              question={questions[current]}
-              dispatch={dispatch}
-              answer={answer}
-              current={current}
-              numberOfQuestions={numberOfQuestions}
-            />
-            <Timer time={secondsRemaining} dispatch={dispatch} />
+            <ProgressBar />
+            <Question />
+            <Timer />
           </>
         )}
-        {status === "finished" && (
-          <Finished points={points} maxPoints={maxPoints} dispatch={dispatch} />
-        )}
+        {status === "finished" && <Finished />}
       </Body>
     </div>
   );
