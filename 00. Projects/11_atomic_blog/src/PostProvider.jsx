@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { faker } from "@faker-js/faker";
 
 // 1.Create the Context
@@ -36,15 +36,28 @@ function PostProvider({ children }) {
     setPosts([]);
   }
 
+  //  memoized value OBJECT for the context
+  const value = useMemo(() => {
+    return {
+      posts: searchedPosts,
+      onAddPost: handleAddPost,
+      onClearPosts: handleClearPosts,
+      searchQuery: searchQuery,
+      setSearchQuery: setSearchQuery,
+    };
+  }, []);
+
   return (
     <PostContext.Provider
-      value={{
-        posts: searchedPosts,
-        onAddPost: handleAddPost,
-        onClearPosts: handleClearPosts,
-        searchQuery: searchQuery,
-        setSearchQuery: setSearchQuery,
-      }}
+      // we memoize this as an optimization
+      // value={{
+      //   posts: searchedPosts,
+      //   onAddPost: handleAddPost,
+      //   onClearPosts: handleClearPosts,
+      //   searchQuery: searchQuery,
+      //   setSearchQuery: setSearchQuery,
+      // }}
+      value={value}
     >
       {children}
     </PostContext.Provider>

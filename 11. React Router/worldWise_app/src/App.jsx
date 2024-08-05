@@ -1,20 +1,31 @@
+import { lazy, Suspense } from "react";
+
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import Product from "./pages/Product";
-import Pricing from "./pages/Pricing";
-import Homepage from "./pages/Homepage";
-import PageNotFound from "./pages/PageNotFound";
-import Login from "./pages/Login";
-import PageNav from "./components/PageNav";
-import AppLayout from "./pages/AppLayout";
+import { CitiesProvider, useCities } from "./context/CitiesContext";
+import { LoginProvider } from "./context/LoginConext";
+
 import CityList from "./components/CityList";
 import CountryList from "./components/CountryList";
 import Form from "./components/Form";
-import Spinner from "./components/Spinner";
-import SpinnerFullPage from "./components/SpinnerFullPage";
 import City from "./components/City";
-import { CitiesProvider, useCities } from "./context/CitiesContext";
-import { LoginProvider } from "./context/LoginConext";
+import Spinner from "./components/Spinner";
+
+//  We are Lazy Loading These pages
+// import Product from "./pages/Product";
+// import Pricing from "./pages/Pricing";
+// import Homepage from "./pages/Homepage";
+// import PageNotFound from "./pages/PageNotFound";
+// import Login from "./pages/Login";
+// import AppLayout from "./pages/AppLayout";
+
+//  Lazy loading the pages
+const Homepage = lazy(() => import("./pages/Homepage"));
+const Product = lazy(() => import("./pages/Product"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+const Login = lazy(() => import("./pages/Login"));
+const AppLayout = lazy(() => import("./pages/AppLayout"));
 
 function App() {
   return (
@@ -22,23 +33,25 @@ function App() {
       <LoginProvider>
         <CitiesProvider>
           <BrowserRouter>
-            <Routes>
-              <Route path="*" element={<PageNotFound />} />
-              <Route index element={<Homepage />} />
-              <Route path="product" element={<Product />} />
-              <Route path="pricing" element={<Pricing />} />
-              <Route path="login" element={<Login />} />
+            <Suspense fallback={<Spinner />}>
+              <Routes>
+                <Route path="*" element={<PageNotFound />} />
+                <Route index element={<Homepage />} />
+                <Route path="product" element={<Product />} />
+                <Route path="pricing" element={<Pricing />} />
+                <Route path="login" element={<Login />} />
 
-              <Route path="app" element={<AppLayout />}>
-                \{/* Nested routes --> Using <OUTLET /> */}
-                <Route index element={<Navigate replace to={"cities"} />} />
-                <Route path="cities" element={<CityList />} />
-                {/* ROUTE for PARAM  */}
-                <Route path="cities/:id" element={<City />} />
-                <Route path="countries" element={<CountryList />} />
-                <Route path="form" element={<Form />} />
-              </Route>
-            </Routes>
+                <Route path="app" element={<AppLayout />}>
+                  \{/* Nested routes --> Using <OUTLET /> */}
+                  <Route index element={<Navigate replace to={"cities"} />} />
+                  <Route path="cities" element={<CityList />} />
+                  {/* ROUTE for PARAM  */}
+                  <Route path="cities/:id" element={<City />} />
+                  <Route path="countries" element={<CountryList />} />
+                  <Route path="form" element={<Form />} />
+                </Route>
+              </Routes>
+            </Suspense>
           </BrowserRouter>
         </CitiesProvider>
       </LoginProvider>
