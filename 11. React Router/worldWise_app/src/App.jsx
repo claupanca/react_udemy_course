@@ -42,7 +42,7 @@ function App() {
                 <Route path="login" element={<Login />} />
 
                 <Route path="app" element={<AppLayout />}>
-                  \{/* Nested routes --> Using <OUTLET /> */}
+                  {/* Nested routes --> Using <OUTLET /> */}
                   <Route index element={<Navigate replace to={"cities"} />} />
                   <Route path="cities" element={<CityList />} />
                   {/* ROUTE for PARAM  */}
