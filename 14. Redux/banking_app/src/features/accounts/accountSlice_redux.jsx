@@ -3,6 +3,7 @@ const initialStateAccount = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
+  isLoading: false,
 };
 
 // account reducer
@@ -10,9 +11,16 @@ export default function accountReducer(
   currState = initialStateAccount,
   action
 ) {
+  console.log("currState", currState);
+  console.log("action", action);
+
   switch (action.type) {
     case "account/deposit":
-      return { ...currState, balance: currState.balance + action.payload };
+      return {
+        ...currState,
+        balance: currState.balance + action.payload,
+        isLoading: false,
+      };
     case "account/withdraw":
       if (action.payload > currState.balance) return currState;
       return { ...currState, balance: currState.balance - action.payload };
@@ -34,6 +42,9 @@ export default function accountReducer(
         loanPurpose: "",
         balance: currState.balance - currState.loan,
       };
+
+    case "account/loading":
+      return { ...currState, isLoading: true };
     // in Redux, for default actions (errors) we just return the current state
     default:
       return currState;
@@ -41,8 +52,23 @@ export default function accountReducer(
 }
 
 // account action creators
-export function deposit(amount) {
-  return { type: "account/deposit", payload: amount };
+export function deposit(amount, currency = "USD") {
+  if (currency === "USD") return { type: "account/deposit", payload: amount };
+  else {
+    // This is the THUNK
+    return async function (dispatch, getState) {
+      dispatch({ type: "account/loading" });
+      //  API call
+      let result;
+      const res = await fetch(
+        `https://api.fxratesapi.com/convert?from=${currency}&to=USD&places=2&amount=${amount}`
+      );
+      const data = await res.json();
+      //
+      //  action
+      dispatch({ type: "account/deposit", payload: data.result });
+    };
+  }
 }
 export function withdraw(amount) {
   return { type: "account/withdraw", payload: amount };

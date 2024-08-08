@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addNewCustomer } from "./customerSlice";
+// import { addNewCustomer } from "./customerSlice_redux";
+import { addNewCustomer } from "./customerSlice_rtk";
 
 function Customer() {
   const [fullName, setFullName] = useState("");
@@ -12,6 +13,9 @@ function Customer() {
     if (!fullName || !nationalId) return;
     dispatch(addNewCustomer(fullName, nationalId));
   }
+
+  //  for testing Purposes
+  // dispatch(addNewCustomer("A", "123"));
 
   return (
     <div>
