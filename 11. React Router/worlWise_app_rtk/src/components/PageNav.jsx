@@ -2,10 +2,16 @@ import { NavLink } from "react-router-dom";
 
 import styles from "./PageNav.module.css";
 import Logo from "./Logo";
-import { useLogin } from "../context/LoginConext";
+// import { useLogin } from "../context/LoginConext";
+import { useSelector } from "react-redux";
+import store from "../store";
 
 export default function PageNav() {
-  const { isAuth } = useLogin();
+  // CONTEXT API
+  // const { isAuth } = useLogin();
+
+  // RTK
+  const { isAuth } = useSelector((store) => store.login);
 
   return (
     <nav className={styles.nav}>

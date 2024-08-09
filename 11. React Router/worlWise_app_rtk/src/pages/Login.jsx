@@ -1,24 +1,33 @@
 import { useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import PageNav from "../components/PageNav";
-import { useLogin } from "../context/LoginConext";
+// import { useLogin } from "../context/LoginConext";
 import { Navigate, useNavigate } from "react-router-dom";
 import Message from "../components/Message";
+
+import { useSelector, useDispatch } from "react-redux";
+import store from "../store";
+import { logIn } from "../redux-slices/loginSlice";
 
 export default function Login() {
   // PRE-FILL FOR DEV PURPOSES
   const [email, setEmail] = useState("test@test.com");
   const [password, setPassword] = useState("test");
 
+  // CONTEXT API
   // we will use the state from the LoginContext
-  const { login, isAuth } = useLogin();
+  // const { login, isAuth } = useLogin();
+
+  // RTK
+  const dispatch = useDispatch();
+  const { isAuth } = useSelector((store) => store.login);
 
   //use navigator to navigate programatically after sucess login
   const navigator = useNavigate();
 
   function handleLogin(e) {
     e.preventDefault();
-    login(email, password);
+    dispatch(logIn(email, password));
 
     // console.log("Login");
     // console.log("dbEmail", dbEmail);

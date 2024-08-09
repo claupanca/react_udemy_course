@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isAuth: false,
-  email: "test@test.com",
-  pass: "test",
+  dbEmail: "test@test.com",
+  dbPass: "test",
 };
 
 const login = createSlice({
@@ -20,10 +20,17 @@ const login = createSlice({
       reducer(currState, action) {
         console.log("currState", action);
         console.log("action", action);
-        currState.isAuth = true;
+
+        // check credentials
+        if (
+          action.payload.email !== currState.dbEmail ||
+          action.payload.password !== currState.dbPass
+        )
+          alert("Wrong Credentials. Try Again");
+        else currState.isAuth = true;
       },
     },
-    logout(currState, action) {
+    logOut(currState, action) {
       currState.isAuth = false;
     },
   },
@@ -31,4 +38,4 @@ const login = createSlice({
 
 export default login.reducer;
 
-export const { logIn } = login.actions;
+export const { logIn, logOut } = login.actions;

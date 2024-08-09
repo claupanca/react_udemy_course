@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // import { CitiesProvider, useCities } from "./context/CitiesContext";
 // import { CitiesProvider } from "./context/CitiesContext";
-import { LoginProvider } from "./context/LoginConext";
+// import { LoginProvider } from "./context/LoginConext";
 
 import CityList from "./components/CityList";
 import CountryList from "./components/CountryList";
@@ -43,31 +43,31 @@ function App() {
       <h1>
         Same app as previous but with REDUX instead of Context API + useReducer
       </h1>
-      <LoginProvider>
-        {/* <CitiesProvider> */}
-        <BrowserRouter>
-          <Suspense fallback={<Spinner />}>
-            <Routes>
-              <Route path="*" element={<PageNotFound />} />
-              <Route index element={<Homepage />} />
-              <Route path="product" element={<Product />} />
-              <Route path="pricing" element={<Pricing />} />
-              <Route path="login" element={<Login />} />
+      {/* <LoginProvider> */}
+      {/* <CitiesProvider> */}
+      <BrowserRouter>
+        <Suspense fallback={<Spinner />}>
+          <Routes>
+            <Route path="*" element={<PageNotFound />} />
+            <Route index element={<Homepage />} />
+            <Route path="product" element={<Product />} />
+            <Route path="pricing" element={<Pricing />} />
+            <Route path="login" element={<Login />} />
 
-              <Route path="app" element={<AppLayout />}>
-                {/* Nested routes --> Using <OUTLET /> */}
-                <Route index element={<Navigate replace to={"cities"} />} />
-                <Route path="cities" element={<CityList />} />
-                {/* ROUTE for PARAM  */}
-                <Route path="cities/:id" element={<City />} />
-                <Route path="countries" element={<CountryList />} />
-                <Route path="form" element={<Form />} />
-              </Route>
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-        {/* </CitiesProvider> */}
-      </LoginProvider>
+            <Route path="app" element={<AppLayout />}>
+              {/* Nested routes --> Using <OUTLET /> */}
+              <Route index element={<Navigate replace to={"cities"} />} />
+              <Route path="cities" element={<CityList />} />
+              {/* ROUTE for PARAM  */}
+              <Route path="cities/:id" element={<City />} />
+              <Route path="countries" element={<CountryList />} />
+              <Route path="form" element={<Form />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+      {/* </CitiesProvider> */}
+      {/* </LoginProvider> */}
     </div>
   );
 }

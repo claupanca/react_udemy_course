@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useLogin } from "../context/LoginConext";
+// import { useLogin } from "../context/LoginConext";
 import styles from "./User.module.css";
+import { useDispatch } from "react-redux";
+import { logOut } from "../redux-slices/loginSlice";
 
 const FAKE_USER = {
   name: "Jack",
@@ -12,11 +14,16 @@ const FAKE_USER = {
 function User() {
   const user = FAKE_USER;
 
-  const { logout } = useLogin();
+  // CONTEXT API
+  // const { logout } = useLogin();
+
+  // RTK
+  const dispatch = useDispatch();
+
   const navigator = useNavigate();
 
   function handleClick() {
-    logout();
+    dispatch(logOut());
     navigator("/");
   }
 

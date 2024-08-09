@@ -3,11 +3,17 @@ import Navigation from "../components/PageNav";
 import PageNav from "../components/PageNav";
 
 import styles from "./Homepage.module.css";
-import { useLogin } from "../context/LoginConext";
+// import { useLogin } from "../context/LoginConext";
+import { useSelector } from "react-redux";
+import store from "../store";
 
 export default function Homepage() {
   // we access the login provider to get the status of the login
-  const { isAuth } = useLogin();
+  // CONTEXT API
+  // const { isAuth } = useLogin();
+
+  // RTK
+  const { isAuth } = useSelector((store) => store.login);
 
   return (
     <div>
