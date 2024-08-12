@@ -1,3 +1,5 @@
+import { Form } from "react-router-dom";
+
 import { useState } from "react";
 
 // https://uibakery.io/regex-library/phone-number
@@ -30,7 +32,7 @@ const fakeCart = [
   },
 ];
 
-function CreateOrder() {
+export default function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
   const cart = fakeCart;
 
@@ -38,7 +40,9 @@ function CreateOrder() {
     <div>
       <h2>Ready to order? Let's go!</h2>
 
-      <form>
+      {/* we use this Form instead of the <form> */}
+
+      <Form method="POST">
         <div>
           <label>First Name</label>
           <input type="text" name="customer" required />
@@ -72,9 +76,16 @@ function CreateOrder() {
         <div>
           <button>Order now</button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 }
 
-export default CreateOrder;
+export async function orderAction(request) {
+  // const formData =
+  // const data = Object.fromEntries(await request.formData());
+  // console.log("formData", formData);
+  console.log("request", request);
+  // console.log("data", data);
+  return null;
+}
