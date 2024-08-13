@@ -11,16 +11,18 @@ export default function AppLayout() {
   // console.log("navigation", navigation);
 
   return (
-    <div className="layout">
+    <div className="grid h-screen grid-rows-[auto_1fr_auto]">
       {/* we are displaying the Loader above everything, when needed */}
       {/* so we are not conditionally showing the loader or the content */}
       {navigation.state === "loading" ? <Spinner /> : ""}
 
       <Header />
 
-      <main>
-        <Outlet />
-      </main>
+      <div className="overflow-scroll bg-gray-100">
+        <main className="mx-auto max-w-2xl">
+          <Outlet />
+        </main>
+      </div>
 
       <CartOverview />
     </div>

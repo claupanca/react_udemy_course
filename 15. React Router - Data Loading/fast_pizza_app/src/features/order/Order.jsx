@@ -52,13 +52,13 @@ export default function Order() {
   console.log("loaderData", loaderData);
 
   const {
-    id,
+    // id,
     status,
     priority,
     priorityPrice,
     orderPrice,
     estimatedDelivery,
-    cart,
+    // cart,
   } = loaderData;
 
   const deliveryIn = calcMinutesLeft(estimatedDelivery);

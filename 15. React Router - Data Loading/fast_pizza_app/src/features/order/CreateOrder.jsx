@@ -1,12 +1,12 @@
 import { Form, redirect, useNavigation, useActionData } from "react-router-dom";
 
-import { useState } from "react";
+// import { useState } from "react";
 import { createOrder } from "../../services/apiRestaurant";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
-    str
+    str,
   );
 
 const fakeCart = [
@@ -54,13 +54,23 @@ export default function CreateOrder() {
       <Form method="POST">
         <div>
           <label>First Name</label>
-          <input type="text" name="customer" required />
+          <input
+            className="w-full rounded-full border border-stone-200 px-4 py-2"
+            type="text"
+            name="customer"
+            required
+          />
         </div>
 
         <div>
           <label>Phone number</label>
           <div>
-            <input type="tel" name="phone" required />
+            <input
+              className="w-full rounded-full border border-stone-200 px-4 py-2"
+              type="tel"
+              name="phone"
+              required
+            />
           </div>
           {formErrors?.phone && <p>{formErrors.phone}</p>}
         </div>
@@ -68,12 +78,18 @@ export default function CreateOrder() {
         <div>
           <label>Address</label>
           <div>
-            <input type="text" name="address" required />
+            <input
+              className="w-full rounded-full border border-stone-200 px-4 py-2"
+              type="text"
+              name="address"
+              required
+            />
           </div>
         </div>
 
         <div>
           <input
+            className="h-6 w-6 accent-green-500"
             type="checkbox"
             name="priority"
             id="priority"
@@ -85,7 +101,11 @@ export default function CreateOrder() {
 
         <div>
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <button disabled={navigation.state === "submitting" ? true : false}>
+          <button
+            // disabled={true}
+            className="rounded-full bg-green-600 p-3 font-semibold uppercase tracking-wide text-green-100 transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:bg-slate-500"
+            disabled={navigation.state === "submitting" ? true : false}
+          >
             Order now
           </button>
         </div>

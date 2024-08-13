@@ -1,6 +1,6 @@
 import { getMenu } from "../../services/apiRestaurant";
 
-import { useLoaderData, useNavigation } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import MenuItem from "./MenuItem";
 
 export default function Menu() {
