@@ -15,6 +15,7 @@ export default function AppLayout() {
       {/* we are displaying the Loader above everything, when needed */}
       {/* so we are not conditionally showing the loader or the content */}
       {navigation.state === "loading" ? <Spinner /> : ""}
+      {/* <Spinner /> */}
 
       <Header />
 

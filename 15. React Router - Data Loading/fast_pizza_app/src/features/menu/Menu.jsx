@@ -9,7 +9,7 @@ export default function Menu() {
   // console.log("Data from loader", dataFromLoader);
 
   return (
-    <ul>
+    <ul className="divide-y divide-green-600 font-semibold">
       {dataFromLoader.map((item) => (
         <MenuItem key={item.id} pizza={item} />
       ))}
