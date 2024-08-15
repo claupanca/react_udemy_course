@@ -3,6 +3,8 @@ import { Form, redirect, useNavigation, useActionData } from "react-router-dom";
 // import { useState } from "react";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
+import { useSelector } from "react-redux";
+import { useState } from "react";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -35,6 +37,9 @@ const fakeCart = [
 ];
 
 export default function CreateOrder() {
+  const userName = useSelector((store) => store.user.user);
+  // const [user, setUser] = useState(userName);
+
   // const [withPriority, setWithPriority] = useState(false);
   const cart = fakeCart;
 
@@ -55,7 +60,19 @@ export default function CreateOrder() {
       <Form method="POST" className="mt-8">
         <div>
           <label>First Name</label>
-          <input className="input mt-2" type="text" name="customer" required />
+          <input
+            className="input mt-2"
+            type="text"
+            name="customer"
+            // value={user}
+            // onChange={(e) => setUser(e.target.value)}
+            // we dont use Value and onChange
+            //
+            // we use defaultValue, and this will set only the initial Value
+            // defaultValue does not require onChange and state
+            defaultValue={userName}
+            required
+          />
         </div>
 
         <div>

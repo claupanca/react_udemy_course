@@ -9,6 +9,9 @@ import AppLayout from "./ui/AppLayout";
 import Error from "./ui/Error";
 // import Home from "./ui/Home";
 
+import store from "./store";
+import { Provider } from "react-redux";
+
 const router = createBrowserRouter([
   {
     // path: "/",
@@ -49,7 +52,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />;
+    </Provider>
+  );
 }
 
 export default App;

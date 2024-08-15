@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 import CreateUser from "../features/user/CreateUser";
 import LinkButton from "./LinkButton";
+import { useSelector } from "react-redux";
+import Button from "./Button";
 
 function Home() {
+  const userName = useSelector((store) => store.user.user);
+
   return (
     <div className="my-10 text-center">
       <h1 className="mb-8 text-xl font-semibold text-green-800 md:text-3xl">
@@ -13,9 +17,14 @@ function Home() {
         </span>
       </h1>
 
-      <CreateUser />
-      {/* <Link to="/menu">Menu</Link>
-      <div></div>
+      {userName == "" ? (
+        <CreateUser />
+      ) : (
+        <Button type="primary" to="/menu">
+          Continue ordering, {userName}
+        </Button>
+      )}
+      {/*<div></div>
       <Link to="/order/new">Add new Order</Link> */}
     </div>
   );

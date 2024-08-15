@@ -1,3 +1,12 @@
+import { useSelector } from "react-redux";
+
 export default function User() {
-  return <h1 className="hidden text-sm  sm:block">UserName</h1>;
+  const userName = useSelector((store) => store.user.user);
+
+  console.log("userName", userName);
+
+  //  if there is no username, we don't render the component
+  if (userName == "") return null;
+
+  return <h1 className="hidden text-sm sm:block">{userName}</h1>;
 }
