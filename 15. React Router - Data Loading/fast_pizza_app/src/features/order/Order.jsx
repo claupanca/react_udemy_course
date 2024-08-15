@@ -9,6 +9,8 @@ import {
 
 import { useLoaderData } from "react-router-dom";
 
+import OrderItem from "./OrderItem";
+
 // const FAKE order = {
 //   id: "ABCDEF",
 //   customer: "Jonas",
@@ -52,41 +54,63 @@ export default function Order() {
   console.log("loaderData", loaderData);
 
   const {
-    // id,
+    id,
     status,
     priority,
     priorityPrice,
     orderPrice,
     estimatedDelivery,
-    // cart,
+    cart,
   } = loaderData;
 
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   return (
-    <div>
-      <div>
-        <h2>Status</h2>
+    <div className="mt-2 space-y-8">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-xl font-semibold">Order # {id} Status </h2>
 
-        <div>
-          {priority && <span>Priority</span>}
-          <span>{status} order</span>
+        <div className="space-x-2">
+          {priority && (
+            <span className="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-green-300">
+              Priority
+            </span>
+          )}
+          <span className="rounded-full bg-red-600 px-4 py-2 text-sm font-semibold uppercase text-red-300">
+            {status} order
+          </span>
         </div>
       </div>
 
-      <div>
-        <p>
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-green-200 px-2 py-4">
+        <p className="font-medium">
           {deliveryIn >= 0
             ? `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😃`
             : "Order should have arrived"}
         </p>
-        <p>(Estimated delivery: {formatDate(estimatedDelivery)})</p>
+        <p className="text-xs text-green-700">
+          (Estimated delivery: {formatDate(estimatedDelivery)})
+        </p>
       </div>
 
-      <div>
-        <p>Price pizza: {formatCurrency(orderPrice)}</p>
-        {priority && <p>Price priority: {formatCurrency(priorityPrice)}</p>}
-        <p>To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}</p>
+      <ul className="divide-y divide-green-300">
+        {cart.map((item) => (
+          <OrderItem item={item} key={item.id} />
+        ))}
+      </ul>
+
+      <div className="space-y-4 bg-green-200 px-2 py-4">
+        <p className="text-sm font-medium">
+          Price pizza: {formatCurrency(orderPrice)}
+        </p>
+        {priority && (
+          <p className="text-sm font-medium">
+            Price priority: {formatCurrency(priorityPrice)}
+          </p>
+        )}
+        <p className="text-md font-bold">
+          To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}
+        </p>
       </div>
     </div>
   );

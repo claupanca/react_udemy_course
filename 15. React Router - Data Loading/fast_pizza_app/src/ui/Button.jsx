@@ -6,7 +6,7 @@ export default function Button({ text, disabled = false, to, children, type }) {
 
   const styles = {
     primary: base + " p-5",
-    small: base + " py-1 px-2 text-sm",
+    small: base + " mt-0 py-1 px-2 text-sm",
     secondary:
       base + " bg-gray-200 px-3 py-2 text-black hover:bg-red-100 border-2",
   };
