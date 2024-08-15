@@ -4,7 +4,7 @@ const initialUserState = {
   user: "",
 };
 
-const userSlice = createSlice({
+const userReducer = createSlice({
   name: "user",
   initialState: initialUserState,
   reducers: {
@@ -38,6 +38,6 @@ async function fetchAddress() {
   return { position, address };
 }
 
-export default userSlice.reducer;
+export default userReducer.reducer;
 
-export const { updateUser } = userSlice.actions;
+export const { updateUser } = userReducer.actions;
