@@ -1,5 +1,6 @@
 import { formatCurrency } from "../../utils/helpers";
 import Button from "../../ui/Button";
+
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 
@@ -13,9 +14,9 @@ function MenuItem({ pizza }) {
   const dispatch = useDispatch();
 
   function handleAdd() {
-    console.log("addToCart", pizza);
-    console.log("quantiy", quantity);
-    dispatch(addToCart(pizza));
+    // console.log("addToCart", pizza);
+    // console.log("quantiy", quantity);
+    dispatch(addToCart(pizza, quantity));
   }
 
   function increaseQty() {
