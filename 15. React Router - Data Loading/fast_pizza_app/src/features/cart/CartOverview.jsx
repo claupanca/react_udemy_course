@@ -1,18 +1,13 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getTotalCartPrice, getTotalCartQuantity } from "./cartSlice";
 
 function CartOverview() {
-  const cart = useSelector((store) => store.cart.cart);
+  const totalQuantity = useSelector(getTotalCartQuantity);
+  const totalPrice = useSelector(getTotalCartPrice);
 
-  const totalQuantity = cart.reduce(
-    (acc, item) => (acc = acc + item.quantity),
-    0,
-  );
-
-  const totalPrice = cart.reduce(
-    (acc, item) => (acc = acc + item.totalPrice),
-    0,
-  );
+  // don't display the component if there is no quantity
+  if (totalQuantity == 0) return null;
 
   return (
     <div className="flex items-center justify-between bg-green-800 px-3 py-3 uppercase text-green-200 sm:px-6">

@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import CreateUser from "../features/user/CreateUser";
 import LinkButton from "./LinkButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
+import { userLocation } from "../features/user/userSlice";
 
 function Home() {
   const userName = useSelector((store) => store.user.user);

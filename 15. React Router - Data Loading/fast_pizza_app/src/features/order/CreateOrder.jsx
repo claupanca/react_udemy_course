@@ -3,8 +3,11 @@ import { Form, redirect, useNavigation, useActionData } from "react-router-dom";
 // import { useState } from "react";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import store from "../../store";
+import { clearCart } from "../cart/cartSlice";
 import { useState } from "react";
+import { userLocation } from "../user/userSlice";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -12,36 +15,45 @@ const isValidPhone = (str) =>
     str,
   );
 
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: "Mediterranean",
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: "Vegetale",
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: "Spinach and Mushroom",
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
+// const fakeCart = [
+//   {
+//     pizzaId: 12,
+//     name: "Mediterranean",
+//     quantity: 2,
+//     unitPrice: 16,
+//     totalPrice: 32,
+//   },
+//   {
+//     pizzaId: 6,
+//     name: "Vegetale",
+//     quantity: 1,
+//     unitPrice: 13,
+//     totalPrice: 13,
+//   },
+//   {
+//     pizzaId: 11,
+//     name: "Spinach and Mushroom",
+//     quantity: 1,
+//     unitPrice: 15,
+//     totalPrice: 15,
+//   },
+// ];
 
 export default function CreateOrder() {
   const userName = useSelector((store) => store.user.user);
   // const [user, setUser] = useState(userName);
 
-  // const [withPriority, setWithPriority] = useState(false);
-  const cart = fakeCart;
+  const [withPriority, setWithPriority] = useState(false);
+  // const cart = fakeCart;
+
+  const cart = useSelector((store) => store.cart.cart);
+
+  const dispatch = useDispatch();
+
+  const totalPrice = cart.reduce(
+    (acc, item) => (acc = acc + item.totalPrice),
+    0,
+  );
 
   // we use this to change the button while the form is sending data
   const navigation = useNavigation();
@@ -89,9 +101,31 @@ export default function CreateOrder() {
 
         <div>
           <label>Address</label>
-          <div>
-            <input className="input mt-2" type="text" name="address" required />
+          <div className="flex">
+            <input
+              className="input mt-2"
+              type="text"
+              name="address"
+              required
+              defaultValue={useSelector((store) => store.user.location.address)}
+            />
+            <Button
+              type="small"
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(userLocation());
+              }}
+            >
+              Localize Me
+            </Button>
           </div>
+          <input
+            type="hidden"
+            name="position"
+            value={useSelector((store) =>
+              JSON.stringify(store.user.location.position),
+            )}
+          />
         </div>
 
         <div className="m-2 flex items-center gap-5">
@@ -100,8 +134,8 @@ export default function CreateOrder() {
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
+            value={withPriority}
+            onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label className="font-medium" htmlFor="priority">
             Want to yo give your order priority?
@@ -121,7 +155,7 @@ export default function CreateOrder() {
             disabled={navigation.state === "submitting" ? true : false}
             type="primary"
           >
-            Order Now
+            {`Order Now for $${withPriority ? totalPrice + 5 : totalPrice}`}
           </Button>
         </div>
       </Form>
@@ -139,7 +173,8 @@ export async function orderAction(request) {
   const order = {
     ...data,
     cart: JSON.parse(data.cart),
-    priority: data.priority === "on",
+    priority: data.priority === "true",
+    position: JSON.parse(data.position),
   };
 
   console.log("order", order);
@@ -156,6 +191,13 @@ export async function orderAction(request) {
   // newOrder is coming back as a response from the API
   const newOrder = await createOrder(order);
   console.log("newOrder is submitted", newOrder);
+
+  // to delete de Cart contents, we are using a HACK
+  // don't overuse this HACK
+  // we manually import the store and clear the cart
+  console.log("store", store);
+  // use dispatch directly
+  store.dispatch(clearCart());
 
   // and we are redirected to the Order Page
   return redirect(`/order/${newOrder.id}`);

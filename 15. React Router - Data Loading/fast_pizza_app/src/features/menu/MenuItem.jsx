@@ -17,6 +17,7 @@ function MenuItem({ pizza }) {
     // console.log("addToCart", pizza);
     // console.log("quantiy", quantity);
     dispatch(addToCart(pizza, quantity));
+    setQuantity(1);
   }
 
   function increaseQty() {
@@ -46,20 +47,22 @@ function MenuItem({ pizza }) {
           ) : (
             <p className="text- text-sm font-medium uppercase">Sold out</p>
           )}
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3">
-              <Button type="small" onClick={decreaseQty} disabled={soldOut}>
-                -
-              </Button>
-              <p>{quantity}</p>
-              <Button type="small" onClick={increaseQty} disabled={soldOut}>
-                +
+          {!soldOut && (
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-3">
+                <Button type="small" onClick={decreaseQty} disabled={soldOut}>
+                  -
+                </Button>
+                <p>{quantity}</p>
+                <Button type="small" onClick={increaseQty} disabled={soldOut}>
+                  +
+                </Button>
+              </div>
+              <Button type="small" onClick={handleAdd} disabled={soldOut}>
+                Add to cart
               </Button>
             </div>
-            <Button type="small" onClick={handleAdd} disabled={soldOut}>
-              Add to cart
-            </Button>
-          </div>
+          )}
         </div>
       </div>
     </li>

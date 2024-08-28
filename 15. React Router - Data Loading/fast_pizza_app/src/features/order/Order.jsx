@@ -7,9 +7,10 @@ import {
   formatDate,
 } from "../../utils/helpers";
 
-import { useLoaderData } from "react-router-dom";
+import { useFetcher, useLoaderData } from "react-router-dom";
 
 import OrderItem from "./OrderItem";
+import { useEffect } from "react";
 
 // const FAKE order = {
 //   id: "ABCDEF",
@@ -64,6 +65,17 @@ export default function Order() {
   } = loaderData;
 
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
+
+  const fetcher = useFetcher();
+  console.log("fetcher", fetcher);
+
+  useEffect(() => {
+    if (!fetcher.data && fetcher.state == "idle") {
+      fetcher.load("/menu");
+    }
+  }, [fetcher]);
+
+  console.log("fetcher", fetcher);
 
   return (
     <div className="mt-2 space-y-8">
