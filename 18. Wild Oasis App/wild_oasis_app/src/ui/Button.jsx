@@ -47,3 +47,25 @@ const variations = {
     }
   `,
 };
+
+const Button = styled.button`
+  /* we are using the props and also the previously defined dictionaries */
+  ${(props) => sizes[props.size]}
+  /* font-size: 1.4rem; */
+  /* padding: 1.2rem 1.6rem; */
+  /* font-weight: 500; */
+
+  ${(props) => variations[props.variation]} /* border: none; */
+  /* background-color: var(--color-brand-600); */
+  /* color: var(--color-brand-50); */
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius-sm);
+  border: none;
+`;
+
+Button.defaultProps = {
+  variation: "primary",
+  size: "medium",
+};
+
+export default Button;
