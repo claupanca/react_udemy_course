@@ -1,4 +1,14 @@
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+
+import {
+  GrAttraction,
+  GrCatalog,
+  GrConfigure,
+  // GrContactInfo,
+  GrGremlin,
+  GrHome,
+} from "react-icons/gr";
 
 const NavList = styled.ul`
   display: flex;
@@ -6,7 +16,9 @@ const NavList = styled.ul`
   gap: 0.8rem;
 `;
 
-const Link = styled.a`
+// const Link = styled.a`
+// we have applied the styled component to the NavLink from react-router
+const StyledNavLink = styled(NavLink)`
   &:link,
   &:visited {
     display: flex;
@@ -44,3 +56,38 @@ const Link = styled.a`
     color: var(--color-brand-600);
   }
 `;
+
+function MainNav() {
+  return (
+    <nav>
+      <NavList>
+        <StyledNavLink to="/dashboard">
+          <GrHome />
+          <span>Home</span>
+        </StyledNavLink>
+        <StyledNavLink to="/bookings">
+          <GrCatalog />
+          <span>Bookings</span>
+        </StyledNavLink>
+        <StyledNavLink to="/cabins">
+          <GrAttraction />
+          <span>Cabins</span>
+        </StyledNavLink>
+        {/* <StyledNavLink to="/account">
+          <GrContactInfo />
+          <span>Account</span>
+        </StyledNavLink> */}
+        <StyledNavLink to="/users">
+          <GrGremlin />
+          <span>Users</span>
+        </StyledNavLink>
+        <StyledNavLink to="/settings">
+          <GrConfigure />
+          <span>Settings</span>
+        </StyledNavLink>
+      </NavList>
+    </nav>
+  );
+}
+
+export default MainNav;

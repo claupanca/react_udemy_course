@@ -8,13 +8,14 @@ const StyledHeader = styled.header`
   border-bottom: 1px solid var(--color-grey-100);
 
   grid-column: 1 / end;
+
+  display: flex;
 `;
 
 function Header() {
   return (
     <StyledHeader>
       <Logo />
-      Header
     </StyledHeader>
   );
 }
