@@ -17,6 +17,9 @@ import Users from "./pages/Users";
 import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 
+// import { createClient } from "@supabase/supabase-js";
+// import { SupaBase_Key, SupaBase_Url } from "../config";
+
 // const StyledApp = styled.div`
 //   /* font-size: 1.4rem; */
 //   /* margin: 0 auto; */
@@ -24,6 +27,22 @@ import AppLayout from "./ui/AppLayout";
 //   /* background-color: orange; */
 //   padding: 20px;
 // `;
+
+// Supabase test
+// const SUPABASE_KEY = SupaBase_Key();
+// const SUPABASE_URL = SupaBase_Url();
+
+// const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// // console.log("supabase", supabase);
+// async function fetchData() {
+//   const { data, error } = await supabase.from("bookings").select("*");
+
+//   if (error) console.log("error", error);
+//   if (data) console.log("data", data);
+// }
+
+// fetchData();
 
 function App() {
   return (

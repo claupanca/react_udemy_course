@@ -1,5 +1,9 @@
+import { getCabins } from "../services/apiCabins";
+
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
+
+console.log(await getCabins());
 
 function Cabins() {
   return (
