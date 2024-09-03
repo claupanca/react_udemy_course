@@ -17,6 +17,21 @@ import Users from "./pages/Users";
 import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  ReactQueryDevtools,
+  // ReactQueryDevtoolsPanel,
+} from "@tanstack/react-query-devtools";
+
+// React Query
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+    },
+  },
+});
+
 // import { createClient } from "@supabase/supabase-js";
 // import { SupaBase_Key, SupaBase_Url } from "../config";
 
@@ -46,7 +61,7 @@ import AppLayout from "./ui/AppLayout";
 
 function App() {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
@@ -66,7 +81,11 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
-    </>
+      {/* Floating Dev Tools */}
+      <ReactQueryDevtools initialIsOpen={open} />
+      {/* FIxed element Dev Tools */}
+      {/* <ReactQueryDevtoolsPanel setIsOpen={true} /> */}
+    </QueryClientProvider>
   );
 }
 

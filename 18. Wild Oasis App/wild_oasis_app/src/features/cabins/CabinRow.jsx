@@ -1,8 +1,11 @@
+import PropTypes from "prop-types";
 import styled from "styled-components";
+
+import { formatCurrency } from "../../utils/helpers";
 
 const TableRow = styled.div`
   display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr 1fr;
   column-gap: 2.4rem;
   align-items: center;
   padding: 1.4rem 2.4rem;
@@ -38,3 +41,33 @@ const Discount = styled.div`
   font-weight: 500;
   color: var(--color-green-700);
 `;
+
+const Adults = styled.div`
+  font-family: "Sono";
+  font-weight: 500;
+  color: var(--color-green-700);
+`;
+
+const Children = styled.div`
+  font-family: "Sono";
+  font-weight: 500;
+  color: var(--color-green-700);
+`;
+
+export default function CabinRow({ cabin }) {
+  return (
+    <TableRow role="row">
+      <Img src={cabin.photo} />
+      <Cabin>{cabin.name}</Cabin>
+      <Adults>{cabin.adults}</Adults>
+      <Children>{cabin.childrens}</Children>
+      <Price>{formatCurrency(cabin.regularPrice)}</Price>
+      <Discount>{formatCurrency(cabin.discount)}</Discount>
+      <button>Delete</button>
+    </TableRow>
+  );
+}
+
+CabinRow.propTypes = {
+  cabin: PropTypes.object.isRequired,
+};
