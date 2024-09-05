@@ -1,7 +1,12 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { GrTrash } from "react-icons/gr";
 
 import { formatCurrency } from "../../utils/helpers";
+import { deleteCabin } from "../../services/apiCabins";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import toast from "react-hot-toast";
 
 const TableRow = styled.div`
   display: grid;
@@ -55,6 +60,21 @@ const Children = styled.div`
 `;
 
 export default function CabinRow({ cabin }) {
+  // get the queryClient
+  const queryClient = useQueryClient();
+
+  // delete handler
+  const { isLoading: isDeleting, mutate } = useMutation({
+    mutationFn: (id) => deleteCabin(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cabins"] });
+      // alert("Delete successfull");
+      // we use react-hot-toast to display nice notitifaction
+      toast.success("Delete successfull");
+    },
+    onError: (error) => toast.error(error.message, { duration: 2000 }),
+  });
+
   return (
     <TableRow role="row">
       <Img src={cabin.photo} />
@@ -63,7 +83,10 @@ export default function CabinRow({ cabin }) {
       <Children>{cabin.childrens}</Children>
       <Price>{formatCurrency(cabin.regularPrice)}</Price>
       <Discount>{formatCurrency(cabin.discount)}</Discount>
-      <button>Delete</button>
+      <button onClick={() => mutate(cabin.id)} disabled={isDeleting}>
+        {" "}
+        <GrTrash />
+      </button>
     </TableRow>
   );
 }

@@ -31,6 +31,7 @@ const TableHeader = styled.header`
 `;
 
 function CabinTable() {
+  // react Query to fetch data from supabase
   const {
     isPending,
     isError,
@@ -39,6 +40,7 @@ function CabinTable() {
     error,
   } = useQuery({
     queryKey: ["cabins"],
+    // pass out api function from services, that will fetch the data
     queryFn: getCabins,
   });
 

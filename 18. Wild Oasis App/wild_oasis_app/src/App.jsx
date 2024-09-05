@@ -22,6 +22,7 @@ import {
   ReactQueryDevtools,
   // ReactQueryDevtoolsPanel,
 } from "@tanstack/react-query-devtools";
+import { Toaster } from "react-hot-toast";
 
 // React Query
 const queryClient = new QueryClient({
@@ -85,6 +86,7 @@ function App() {
       <ReactQueryDevtools initialIsOpen={open} />
       {/* FIxed element Dev Tools */}
       {/* <ReactQueryDevtoolsPanel setIsOpen={true} /> */}
+      <Toaster />
     </QueryClientProvider>
   );
 }
