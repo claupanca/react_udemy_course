@@ -8,6 +8,8 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export default supabase;
 
+export { SUPABASE_URL };
+
 // // console.log("supabase", supabase);
 // async function fetchData() {
 //   const { data, error } = await supabase.from("bookings").select("*");

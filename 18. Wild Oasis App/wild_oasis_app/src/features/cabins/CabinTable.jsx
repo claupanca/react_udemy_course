@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
-import { useQuery } from "@tanstack/react-query";
-import { getCabins } from "../../services/apiCabins";
+// import { useQuery } from "@tanstack/react-query";
+// import { getCabins } from "../../services/apiCabins";
 
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
+import useGetCabins from "./useGetCabins";
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -32,17 +33,20 @@ const TableHeader = styled.header`
 
 function CabinTable() {
   // react Query to fetch data from supabase
-  const {
-    isPending,
-    isError,
-    // we rename the data to cabins
-    data: cabins,
-    error,
-  } = useQuery({
-    queryKey: ["cabins"],
-    // pass out api function from services, that will fetch the data
-    queryFn: getCabins,
-  });
+  // const {
+  //   isPending,
+  //   isError,
+  //   // we rename the data to cabins
+  //   data: cabins,
+  //   error,
+  // } = useQuery({
+  //   queryKey: ["cabins"],
+  //   // pass out api function from services, that will fetch the data
+  //   queryFn: getCabins,
+  // });
+
+  // we use a custom hook to get the data
+  const { isPending, isError, cabins, error } = useGetCabins();
 
   if (isPending) {
     return <Spinner />;

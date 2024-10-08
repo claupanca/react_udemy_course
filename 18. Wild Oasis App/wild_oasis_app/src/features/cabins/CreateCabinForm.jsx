@@ -1,44 +1,78 @@
+// import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+// import { addEditCabin } from "../../services/apiCabins";
+import useEditAddCabin from "./useEditAddCabin";
+
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
+import FormRow from "../../ui/FormRow";
 
 import PropTypes from "prop-types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { addCabin } from "../../services/apiCabins";
-import FormRow from "../../ui/FormRow";
+// import toast from "react-hot-toast";
 import Input from "../../ui/Input";
 
-function CreateCabinForm({ cancelButton }) {
+function CreateCabinForm({ cancelButton, cabinToEdit = {} }) {
+  // we are using these for edit a cabin that we will pass into the useForm react hook
+  const {
+    name,
+    adults,
+    childrens,
+    description,
+    regularPrice,
+    discount,
+    photo,
+    id,
+  } = cabinToEdit;
+
+  const isEditSession = Boolean(id);
+
   // react hook form setup
-  const { register, handleSubmit, reset, getValues, formState } = useForm();
+  const { register, handleSubmit, reset, getValues, formState } = useForm({
+    defaultValues: {
+      name: name,
+      adults: adults,
+      childrens: childrens,
+      regularPrice: regularPrice,
+      description: description,
+      discount: discount,
+      photo: photo,
+    },
+  });
+
   // const onSubmit: (data) =>console.log(data)
 
   const { errors } = formState;
   // console.log("errors", errors);
 
-  const queryClient = useQueryClient();
+  // we are using a custom hook for the update and new cabin React Query logic
+  const { isCreateEdit, createEdit } = useEditAddCabin(isEditSession, id);
+
+  // const queryClient = useQueryClient();
 
   //update handler or new cabin
-  const { isLoading: isCreate, mutate } = useMutation({
-    mutationFn: (data) => addCabin(data),
-    // mutationFn: (data) => console.log(data),
-    onSuccess: () => {
-      // console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      toast.success("Cabin Created");
-      // manually reset the form using the form hook
-      reset();
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+  // const { isLoading: isCreate, mutate } = useMutation({
+  //   // const { isLoading: isCreate } = useMutation({
+  //   mutationFn: (data) => addEditCabin(data, id),
+  //   // mutationFn: (data) => console.log(data),
+  //   onSuccess: () => {
+  //     // console.log(data);
+  //     queryClient.invalidateQueries({ queryKey: ["cabins"] });
+  //     toast.success(`${isEditSession ? "Cabin Updated" : "Cabin Created"}`);
+  //     // manually reset the form using the form hook
+  //     reset();
+  //   },
+  //   onError: (error) => {
+  //     toast.error(error.message);
+  //   },
+  // });
 
   function onSubmit(data) {
-    mutate(data);
+    console.log("formData", data);
+    // we can also access the onSuccess function of React Query in the mutate(createEdit) function
+    createEdit({ ...data, photo: data.photo[0] }, { onSuccess: () => reset() });
+    // passing the reset() from React Form, we will reset the form here, not inside the createEdit logic
   }
 
   function onError() {
@@ -109,8 +143,15 @@ function CreateCabinForm({ cancelButton }) {
         />
       </FormRow>
 
-      <FormRow label="Image" error={errors?.image?.message}>
-        <FileInput id="image" accept="image/*" />
+      <FormRow label="Image">
+        <FileInput
+          id="image"
+          accept="image/*"
+          error={errors?.image?.message}
+          {...register("photo", {
+            required: isEditSession ? false : "This field is required",
+          })}
+        />
       </FormRow>
 
       {/*  we will export all the FormRow into a separate component */}
@@ -199,8 +240,8 @@ function CreateCabinForm({ cancelButton }) {
       >
         Cancel
       </Button>
-      <Button type="submit" disabled={isCreate}>
-        Add cabin
+      <Button type="submit" disabled={isCreateEdit}>
+        {isEditSession ? "Edit Cabin" : "Create New Cabin"}
       </Button>
       {/* </FormRow> */}
     </Form>
@@ -209,6 +250,7 @@ function CreateCabinForm({ cancelButton }) {
 
 CreateCabinForm.propTypes = {
   cancelButton: PropTypes.func,
+  cabinToEdit: PropTypes.object,
 };
 
 export default CreateCabinForm;
