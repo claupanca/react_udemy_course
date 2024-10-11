@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 // import toast from "react-hot-toast";
 import Input from "../../ui/Input";
 
-function CreateCabinForm({ cancelButton, cabinToEdit = {} }) {
+function CreateCabinForm({ onCloseModal, cabinToEdit = {} }) {
   // we are using these for edit a cabin that we will pass into the useForm react hook
   const {
     name,
@@ -29,7 +29,8 @@ function CreateCabinForm({ cancelButton, cabinToEdit = {} }) {
   const isEditSession = Boolean(id);
 
   // react hook form setup
-  const { register, handleSubmit, reset, getValues, formState } = useForm({
+  // const { register, handleSubmit, reset, getValues, formState } = useForm({
+  const { register, handleSubmit, getValues, formState } = useForm({
     defaultValues: {
       name: name,
       adults: adults,
@@ -71,7 +72,11 @@ function CreateCabinForm({ cancelButton, cabinToEdit = {} }) {
   function onSubmit(data) {
     console.log("formData", data);
     // we can also access the onSuccess function of React Query in the mutate(createEdit) function
-    createEdit({ ...data, photo: data.photo[0] }, { onSuccess: () => reset() });
+    // createEdit({ ...data, photo: data.photo[0] }, { onSuccess: () => reset() });
+    createEdit(
+      { ...data, photo: data.photo[0] },
+      { onSuccess: () => onCloseModal?.() }
+    );
     // passing the reset() from React Form, we will reset the form here, not inside the createEdit logic
   }
 
@@ -80,7 +85,10 @@ function CreateCabinForm({ cancelButton, cabinToEdit = {} }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       {/* <Form> */}
 
       <FormRow label="Cabin name" error={errors?.name?.message}>
@@ -234,9 +242,7 @@ function CreateCabinForm({ cancelButton, cabinToEdit = {} }) {
       <Button
         variation="secondary"
         type="reset"
-        onClick={() => {
-          cancelButton((prevState) => !prevState);
-        }}
+        onClick={() => onCloseModal?.()}
       >
         Cancel
       </Button>
@@ -249,7 +255,7 @@ function CreateCabinForm({ cancelButton, cabinToEdit = {} }) {
 }
 
 CreateCabinForm.propTypes = {
-  cancelButton: PropTypes.func,
+  onCloseModal: PropTypes.func,
   cabinToEdit: PropTypes.object,
 };
 

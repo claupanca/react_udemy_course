@@ -1,4 +1,12 @@
+import PropTypes from "prop-types";
 import styled from "styled-components";
+
+import { GrClose } from "react-icons/gr";
+import { createPortal } from "react-dom";
+import { createContext } from "react";
+import { useContext } from "react";
+import { cloneElement } from "react";
+import { useState } from "react";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -48,3 +56,94 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+// Compound Component
+const ModalContext = createContext();
+
+// 1. Parent Component
+function Modal({ children }) {
+  const [openName, setOpenName] = useState("");
+
+  const closeWindow = () => setOpenName("");
+  const openWindow = setOpenName;
+
+  // console.log("openWIndow", openName);
+
+  return (
+    <ModalContext.Provider
+      value={{
+        openName: openName,
+        closeWindow: closeWindow,
+        openWindow: openWindow,
+      }}
+    >
+      {children}
+    </ModalContext.Provider>
+  );
+}
+
+// 2. Children Components
+function Window({ name, children }) {
+  const context = useContext(ModalContext);
+  const { openName, closeWindow } = context;
+
+  // console.log(name);
+
+  if (name !== openName) return null;
+
+  return createPortal(
+    <Overlay>
+      <StyledModal>
+        {/* Closing modal BUtton */}
+        <Button onClick={closeWindow}>
+          <GrClose />
+        </Button>
+        {/*  we clone the element again to pass extra props */}
+        <div>{cloneElement(children, { onCloseModal: closeWindow })}</div>
+      </StyledModal>
+    </Overlay>,
+    document.body
+  );
+}
+
+function Open({ children, opensWindowName }) {
+  const context = useContext(ModalContext);
+  const { openWindow } = context;
+
+  return cloneElement(children, { onClick: () => openWindow(opensWindowName) });
+}
+
+// 4. Make Children Components as Properties of the Parent Component
+Modal.Opens = Open;
+Modal.Window = Window;
+
+export { Modal, Open };
+
+// function Modal({ onCloseClick, children }) {
+//   return createPortal(
+//     <div>
+//       <Overlay>
+//         <StyledModal>
+//           {/* Closing modal BUtton */}
+//           <Button onClick={onCloseClick}>
+//             <GrClose />
+//           </Button>
+
+//           {children}
+//         </StyledModal>
+//       </Overlay>
+//     </div>,
+//     document.body
+//   );
+// }
+
+Modal.propTypes = {
+  children: PropTypes.node,
+};
+
+Window.propTypes = {
+  children: PropTypes.node,
+  name: PropTypes.string,
+};
+
+export default Modal;
