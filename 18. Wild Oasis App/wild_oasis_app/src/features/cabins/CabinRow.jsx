@@ -1,28 +1,33 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { GrClone, GrEdit, GrTrash } from "react-icons/gr";
+import { GrClone, GrTrash } from "react-icons/gr";
 
 import { formatCurrency } from "../../utils/helpers";
 // import { deleteCabin } from "../../services/apiCabins";
 // import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // import toast from "react-hot-toast";
-import { useState } from "react";
-import CreateCabinForm from "./CreateCabinForm";
+// import { useState } from "react";
+// import CreateCabinForm from "./CreateCabinForm";
 import useDeleteCabin from "./useDeleteCabin";
 import useEditAddCabin from "./useEditAddCabin";
+import EditCabin from "./EditCabin";
+import Button from "../../ui/Button";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import { Table } from "../../ui/Table";
 
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
+// const TableRow = styled.div`
+//   display: grid;
+//   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr 1fr;
+//   column-gap: 2.4rem;
+//   align-items: center;
+//   padding: 1.4rem 2.4rem;
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
+//   &:not(:last-child) {
+//     border-bottom: 1px solid var(--color-grey-100);
+//   }
+// `;
 
 const Img = styled.img`
   display: block;
@@ -70,7 +75,7 @@ const Buttons = styled.div`
 `;
 
 export default function CabinRow({ cabin }) {
-  const [showForm, setShowForm] = useState(false);
+  // const [showForm, setShowForm] = useState(false);
 
   const { name, adults, childrens, regularPrice, discount, photo, id } = cabin;
 
@@ -108,13 +113,13 @@ export default function CabinRow({ cabin }) {
     });
   }
 
-  function handleEditButton() {
-    setShowForm((prevState) => !prevState);
-  }
+  // function handleEditButton() {
+  //   setShowForm((prevState) => !prevState);
+  // }
 
   return (
     <>
-      <TableRow role="row">
+      <Table.Row role="row">
         <Img src={photo} />
         <Cabin>{name}</Cabin>
         <Adults>{adults}</Adults>
@@ -126,25 +131,51 @@ export default function CabinRow({ cabin }) {
           <span>&mdash;</span>
         )}
         <Buttons>
-          <button onClick={() => deleteCabin(id)} disabled={isDeleting}>
-            {" "}
+          <Modal>
+            <Modal.Opens opensWindowName="delete-form">
+              <Button>
+                <GrTrash />
+              </Button>
+            </Modal.Opens>
+
+            <Modal.Window name="delete-form">
+              <ConfirmDelete
+                resourceName={name}
+                onConfirm={() => deleteCabin(id)}
+                disabled={isDeleting}
+              />
+            </Modal.Window>
+          </Modal>
+
+          {/* We have replaced this button with a Modal Button */}
+          {/* <Button
+            onClick={() => deleteCabin(id)}
+            disabled={isDeleting}
+            variation="secondary"
+            size="small"
+          >
             <GrTrash />
-          </button>
-          <button onClick={() => handleEditButton()}>
-            {" "}
+          </Button> */}
+
+          {/* <Button onClick={() => handleEditButton()}>
             <GrEdit />
-          </button>
-          <button
+          </Button> */}
+          {/* replaced the Button with COMPOUND COMPONENT and form in MODAL */}
+          <EditCabin cabin={cabin} />
+
+          <Button
             onClick={() => handleDuplicateCabin()}
             disabled={isCreateEdit}
+            variation="secondary"
+            size="small"
           >
             <GrClone />
-          </button>
+          </Button>
         </Buttons>
-      </TableRow>
-      {showForm && (
+      </Table.Row>
+      {/* {showForm && (
         <CreateCabinForm cancelButton={setShowForm} cabinToEdit={cabin} />
-      )}
+      )} */}
     </>
   );
 }

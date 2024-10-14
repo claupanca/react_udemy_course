@@ -7,6 +7,9 @@ import { createContext } from "react";
 import { useContext } from "react";
 import { cloneElement } from "react";
 import { useState } from "react";
+// import { useEffect } from "react";
+// import { useRef } from "react";
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -67,8 +70,6 @@ function Modal({ children }) {
   const closeWindow = () => setOpenName("");
   const openWindow = setOpenName;
 
-  // console.log("openWIndow", openName);
-
   return (
     <ModalContext.Provider
       value={{
@@ -87,13 +88,37 @@ function Window({ name, children }) {
   const context = useContext(ModalContext);
   const { openName, closeWindow } = context;
 
+  // we have extracted this into a CUSTOM HOOK
+  const outsideClickRef = useOutsideClick(closeWindow, true);
+
+  // detecting a click outside the modal
+  // const ref = useRef();
+  // useEffect(() => {
+  //   function handleClick(e) {
+  //     // console.log("e", e.target);
+  //     // console.log("ref", ref.current);
+  //     // check if it exists
+  //     if (ref.current) {
+  //       if (!ref.current.contains(e.target)) {
+  //         closeWindow();
+  //       }
+  //     }
+  //   }
+
+  //   document.addEventListener("click", handleClick, true);
+
+  //   return () => {
+  //     document.removeEventListener("click", handleClick, true);
+  //   };
+  // }, []);
+
   // console.log(name);
 
   if (name !== openName) return null;
 
   return createPortal(
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={outsideClickRef}>
         {/* Closing modal BUtton */}
         <Button onClick={closeWindow}>
           <GrClose />

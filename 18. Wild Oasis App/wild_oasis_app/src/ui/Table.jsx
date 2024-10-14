@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { createContext } from "react";
 import styled from "styled-components";
 
 const StyledTable = styled.div`
@@ -58,3 +60,46 @@ const Empty = styled.p`
   text-align: center;
   margin: 2.4rem;
 `;
+
+// 2. Parent Context
+const TableContext = createContext();
+
+// 1. Parent Element
+function Table({ children, columns }) {
+  const columns = columns;
+
+  return (
+    <TableContext
+      value={{
+        columns: columns,
+      }}
+    >
+      <StyledTable>{children}</StyledTable>;
+    </TableContext>
+  );
+}
+
+// 3. Child Components
+function Header({ children }) {
+  const { columns } = useContext();
+  return <StyledHeader> {children}</StyledHeader>;
+}
+
+function Row({ children }) {
+  return <StyledRow></StyledRow>;
+}
+
+function Body({ children }) {
+  return <StyledBody></StyledBody>;
+}
+
+// function Footer({ children }) {
+//   return <Footer></Footer>;
+// }
+
+Table.Header = Header;
+Table.Row = Row;
+Table.Body = Body;
+Table.Footer = Footer;
+
+export { Table, Header, Row };

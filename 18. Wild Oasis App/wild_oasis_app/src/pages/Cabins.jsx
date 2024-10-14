@@ -1,4 +1,5 @@
-import CabinTable from "../features/cabins/CabinTable";
+// import CabinTable from "../features/cabins/CabinTable-Original";
+import CabinTable from "../features/cabins/CabinTable-Compound";
 
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
