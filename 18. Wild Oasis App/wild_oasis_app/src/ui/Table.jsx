@@ -1,5 +1,7 @@
+import PropTypes from "prop-types";
 import { useContext } from "react";
 import { createContext } from "react";
+
 import styled from "styled-components";
 
 const StyledTable = styled.div`
@@ -54,52 +56,68 @@ const Footer = styled.footer`
   }
 `;
 
-const Empty = styled.p`
-  font-size: 1.6rem;
-  font-weight: 500;
-  text-align: center;
-  margin: 2.4rem;
-`;
+// const Empty = styled.p`
+//   font-size: 1.6rem;
+//   font-weight: 500;
+//   text-align: center;
+//   margin: 2.4rem;
+// `;
 
 // 2. Parent Context
-const TableContext = createContext();
+const TableContext = createContext("");
 
 // 1. Parent Element
-function Table({ children, columns }) {
-  const columns = columns;
+export default function Table({ children, columnsa }) {
+  const columns = columnsa;
 
   return (
-    <TableContext
+    <TableContext.Provider
       value={{
         columns: columns,
       }}
     >
-      <StyledTable>{children}</StyledTable>;
-    </TableContext>
+      <StyledTable role="table">{children}</StyledTable>
+    </TableContext.Provider>
   );
 }
 
 // 3. Child Components
 function Header({ children }) {
-  const { columns } = useContext();
-  return <StyledHeader> {children}</StyledHeader>;
+  const { columns } = useContext(TableContext);
+  console.log("columns", columns);
+  return <StyledHeader columns={columns}>{children}</StyledHeader>;
 }
 
 function Row({ children }) {
-  return <StyledRow></StyledRow>;
+  const { columns } = useContext(TableContext);
+  return (
+    <StyledRow role="row" columns={columns}>
+      {children}
+    </StyledRow>
+  );
 }
 
 function Body({ children }) {
-  return <StyledBody></StyledBody>;
+  return <StyledBody>{children}</StyledBody>;
 }
 
-// function Footer({ children }) {
-//   return <Footer></Footer>;
-// }
+function TableFooter() {
+  return <Footer>Footer</Footer>;
+}
 
 Table.Header = Header;
 Table.Row = Row;
 Table.Body = Body;
-Table.Footer = Footer;
+Table.Footer = TableFooter;
 
-export { Table, Header, Row };
+const childrenProp = { children: PropTypes.node };
+
+Table.propTypes = { ...childrenProp, columnsa: PropTypes.string };
+
+Header.propTypes = childrenProp;
+
+Row.propTypes = childrenProp;
+
+Body.propTypes = childrenProp;
+
+export { Header, Row, Body, Footer };

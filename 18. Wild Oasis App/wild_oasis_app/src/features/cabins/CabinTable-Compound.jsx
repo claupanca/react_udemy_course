@@ -7,6 +7,7 @@ import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
 import useGetCabins from "./useGetCabins";
 import Table from "../../ui/Table";
+import { Menus } from "../../ui/Menus";
 
 // const TableHeader = styled.header`
 //   display: grid;
@@ -51,7 +52,7 @@ function CabinTable() {
   // console.log("data", cabins);
 
   return (
-    <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr 1fr">
+    <Table columnsa="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr 1fr">
       <Table.Header role="row">
         <div>Img</div>
         <div>Cabin</div>
@@ -62,9 +63,13 @@ function CabinTable() {
         <div>_</div>
       </Table.Header>
 
-      {cabins.map((cabin) => (
-        <CabinRow cabin={cabin} key={cabin.id} />
-      ))}
+      {/* we wrap all rows in the MENUS context to track which menu is open. Only 1 at a time */}
+      <Menus>
+        {cabins.map((cabin) => (
+          <CabinRow cabin={cabin} key={cabin.id} />
+        ))}
+        <Menus.List>List</Menus.List>
+      </Menus>
     </Table>
   );
 }
