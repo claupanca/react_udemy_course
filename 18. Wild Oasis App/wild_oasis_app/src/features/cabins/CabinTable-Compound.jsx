@@ -7,7 +7,7 @@ import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
 import useGetCabins from "./useGetCabins";
 import Table from "../../ui/Table";
-import { Menus } from "../../ui/Menus";
+import Menus from "../../ui/Menus";
 
 // const TableHeader = styled.header`
 //   display: grid;
@@ -68,7 +68,6 @@ function CabinTable() {
         {cabins.map((cabin) => (
           <CabinRow cabin={cabin} key={cabin.id} />
         ))}
-        <Menus.List>List</Menus.List>
       </Menus>
     </Table>
   );

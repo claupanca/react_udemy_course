@@ -4,6 +4,10 @@ import { createContext } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 
+import { GrMore } from "react-icons/gr";
+import useOutsideClick from "../hooks/useOutsideClick";
+import { createPortal } from "react-dom";
+
 const StyledMenu = styled.div`
   display: flex;
   align-items: center;
@@ -28,7 +32,6 @@ const StyledToggle = styled.button`
     color: var(--color-grey-700);
   }
 `;
-
 const StyledList = styled.ul`
   position: fixed;
 
@@ -38,48 +41,65 @@ const StyledList = styled.ul`
 
   right: ${(props) => props.position.x}px;
   top: ${(props) => props.position.y}px;
+
+  /* transition: all 5s ease-out; */
 `;
 
-// const StyledButton = styled.button`
-//   width: 100%;
-//   text-align: left;
-//   background: none;
-//   border: none;
-//   padding: 1.2rem 2.4rem;
-//   font-size: 1.4rem;
-//   transition: all 0.2s;
+const StyledButton = styled.button`
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 1.2rem 2.4rem;
+  font-size: 1.4rem;
+  transition: all 0.2s;
 
-//   display: flex;
-//   align-items: center;
-//   gap: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
 
-//   &:hover {
-//     background-color: var(--color-grey-50);
-//   }
+  &:hover {
+    background-color: var(--color-grey-50);
+  }
 
-//   & svg {
-//     width: 1.6rem;
-//     height: 1.6rem;
-//     color: var(--color-grey-400);
-//     transition: all 0.3s;
-//   }
-// `;
+  & svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    color: var(--color-grey-400);
+    transition: all 0.3s;
+  }
+`;
 
 // 2. Create Context
 const MenusContext = createContext("");
 
 //  1.  Parent Element
 function Menus({ children }) {
-  const [position, setPosition] = useState([{ x: 0, y: 0 }]);
+  const [openId, setOpenId] = useState("");
+  const close = () => setOpenId("");
+  const open = setOpenId;
+
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   function handlePosition(e) {
-    console.log("state", position);
-    setPosition(() => [{ x: e.clientX, y: e.clientY }]);
+    // console.log("state", position);
+    // console.log("e", e.getBoundingClientRect().x);
+    setPosition({
+      x:
+        window.innerWidth -
+        e.getBoundingClientRect().x -
+        e.getBoundingClientRect().width,
+      y: e.getBoundingClientRect().y + e.getBoundingClientRect().height + 8,
+    });
+    // setPosition({ x: 0, y: 0 });
   }
 
   return (
     <MenusContext.Provider
       value={{
+        openId: openId,
+        open: open,
+        close: close,
         position: position,
         handlePosition: handlePosition,
       }}
@@ -94,23 +114,58 @@ function Menu({ children }) {
   return <StyledMenu>{children}</StyledMenu>;
 }
 
-function Toggle({ children }) {
-  const { handlePosition } = useContext(MenusContext);
+function Toggle({ id }) {
+  const { handlePosition, open, close, openId } = useContext(MenusContext);
 
-  return <StyledToggle onClick={handlePosition}>{children}</StyledToggle>;
-}
-
-function List({ children }) {
-  const { position } = useContext(MenusContext);
-
-  console.log("Position", position);
+  function handleClick(e) {
+    // console.log("openId", openId, "id", id);
+    openId === "" || openId !== id ? open(id) : close();
+    // console.log("e.target", e.target.closest("button"));
+    // we get the closest BUTTON as target
+    handlePosition(e.target.closest("button"));
+  }
 
   return (
-    <StyledList position={position}>
-      <li>List1</li>
-      <li>List2</li>
+    <StyledToggle onClick={handleClick}>
+      <GrMore />
+    </StyledToggle>
+  );
+}
+
+function List({ children, id }) {
+  const { position, openId, close } = useContext(MenusContext);
+
+  // we use the useOutsideClick to close the MENU
+  const ref = useOutsideClick(close);
+
+  if (openId !== id) return null;
+
+  // console.log("Position", position.x, position.y);
+
+  return createPortal(
+    <StyledList position={position} ref={ref}>
       {children}
-    </StyledList>
+    </StyledList>,
+    document.body
+  );
+}
+
+function Button({ children, onClick, icon }) {
+  const { close } = useContext(MenusContext);
+
+  function handleClick() {
+    // we use OPTIONAL CHAINING - if onClick exists
+    onClick?.();
+    close();
+  }
+
+  return (
+    <li>
+      <StyledButton onClick={handleClick}>
+        {icon}
+        <span>{children}</span>
+      </StyledButton>
+    </li>
   );
 }
 
@@ -118,11 +173,21 @@ function List({ children }) {
 Menus.Menu = Menu;
 Menus.Toggle = Toggle;
 Menus.List = List;
+Menus.Button = Button;
 
 const childrenProp = { children: PropTypes.node };
 Menus.propTypes = childrenProp;
 Menu.propTypes = childrenProp;
-Toggle.propTypes = childrenProp;
-List.propTypes = { ...childrenProp, position: PropTypes.object };
+Toggle.propTypes = { id: PropTypes.number };
+List.propTypes = {
+  ...childrenProp,
+  position: PropTypes.object,
+  id: PropTypes.number,
+};
+Button.propTypes = {
+  ...childrenProp,
+  onClick: PropTypes.func,
+  icon: PropTypes.node,
+};
 
-export { Menus, Menu, Toggle, List };
+export default Menus;

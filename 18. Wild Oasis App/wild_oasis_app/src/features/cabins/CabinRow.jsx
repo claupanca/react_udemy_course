@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { GrClone, GrTrash } from "react-icons/gr";
+import { GrClone, GrTrash, GrEdit } from "react-icons/gr";
 
 import { formatCurrency } from "../../utils/helpers";
 // import { deleteCabin } from "../../services/apiCabins";
@@ -8,16 +8,15 @@ import { formatCurrency } from "../../utils/helpers";
 
 // import toast from "react-hot-toast";
 // import { useState } from "react";
-// import CreateCabinForm from "./CreateCabinForm";
+import CreateCabinForm from "./CreateCabinForm";
 import useDeleteCabin from "./useDeleteCabin";
 import useEditAddCabin from "./useEditAddCabin";
-import EditCabin from "./EditCabin";
-import Button from "../../ui/Button";
+// import EditCabin from "./EditCabin";
+// import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
-import { Menus } from "../../ui/Menus";
-import { GrMore } from "react-icons/gr";
+import Menus from "../../ui/Menus";
 
 // const TableRow = styled.div`
 //   display: grid;
@@ -70,11 +69,11 @@ const Children = styled.div`
   color: var(--color-green-700);
 `;
 
-const Buttons = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-`;
+// const Buttons = styled.div`
+//   display: flex;
+//   align-items: center;
+//   gap: 1rem;
+// `;
 
 export default function CabinRow({ cabin }) {
   // const [showForm, setShowForm] = useState(false);
@@ -132,25 +131,56 @@ export default function CabinRow({ cabin }) {
         <span>&mdash;</span>
       )}
       {/*  we have replaced these 3 buttons with the Floating MENU from UI/Menu */}
-      <Buttons>
-        <Modal>
-          <Modal.Opens opensWindowName="delete-form">
-            <Button size="small" variation="secondary">
-              <GrTrash />
-            </Button>
-          </Modal.Opens>
+      {/* <Buttons> */}
+      {/* It's all wrapped into the Modal because the buttons will open a modal */}
+      <Modal>
+        {/* we have combined the MODAL with the MENUS */}
+        {/* Here we have the Menus.Menu - the actual MENU that is open or closed */}
+        <Menus.Menu>
+          <Menus.Toggle id={id} />
 
-          <Modal.Window name="delete-form">
-            <ConfirmDelete
-              resourceName={name}
-              onConfirm={() => deleteCabin(id)}
-              disabled={isDeleting}
-            />
-          </Modal.Window>
-        </Modal>
+          <Menus.List id={id}>
+            <Modal.Opens opensWindowName="edit-form">
+              <Menus.Button icon={<GrEdit />}>
+                {/* <EditCabin cabin={cabin} /> Edit */}Edit
+              </Menus.Button>
+            </Modal.Opens>
 
-        {/* We have replaced this button with a Modal Button */}
-        {/* <Button
+            <Menus.Button
+              onClick={handleDuplicateCabin}
+              icon={<GrClone />}
+              disabled={isCreateEdit}
+            >
+              Duplicate
+            </Menus.Button>
+
+            {/* Here we use both Modal.Opens and Menus.Button to open the Delete Modal */}
+            <Modal.Opens opensWindowName="delete-form">
+              <Menus.Button onClick={deleteCabin} icon={<GrTrash />}>
+                Delete
+              </Menus.Button>
+            </Modal.Opens>
+          </Menus.List>
+        </Menus.Menu>
+
+        <Modal.Window name="delete-form">
+          <ConfirmDelete
+            resourceName={name}
+            onConfirm={() => deleteCabin(id)}
+            disabled={isDeleting}
+          />
+        </Modal.Window>
+
+        <Modal.Window name="edit-form">
+          <CreateCabinForm
+            // cancelButton={setShowForm}
+            cabinToEdit={cabin}
+          ></CreateCabinForm>
+        </Modal.Window>
+      </Modal>
+
+      {/* We have replaced this button with a Modal Button */}
+      {/* <Button
             onClick={() => deleteCabin(id)}
             disabled={isDeleting}
             variation="secondary"
@@ -158,30 +188,25 @@ export default function CabinRow({ cabin }) {
           >
             <GrTrash />
           </Button> */}
-        {/* <Button onClick={() => handleEditButton()}>
+      {/* <Button onClick={() => handleEditButton()}>
             <GrEdit />
           </Button> */}
-        {/* replaced the Button with COMPOUND COMPONENT and form in MODAL */}
-        <EditCabin cabin={cabin} />
 
-        <Button
+      {/* replaced the Button with COMPOUND COMPONENT and form in MODAL */}
+      {/* <EditCabin cabin={cabin} /> */}
+
+      {/* <Button
           onClick={() => handleDuplicateCabin()}
           disabled={isCreateEdit}
           variation="secondary"
           size="small"
         >
           <GrClone />
-        </Button>
-      </Buttons>
+        </Button> */}
+      {/* </Buttons> */}
       {/* {showForm && (
         <CreateCabinForm cancelButton={setShowForm} cabinToEdit={cabin} />
       )} */}
-      {/* Here we have the Menus.Menu - the actual MENU that is open or closed */}
-      <Menus.Menu>
-        <Menus.Toggle>
-          <GrMore />
-        </Menus.Toggle>
-      </Menus.Menu>
     </Table.Row>
   );
 }

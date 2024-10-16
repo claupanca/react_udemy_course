@@ -6,6 +6,8 @@ import { GrEdit } from "react-icons/gr";
 import PropTypes from "prop-types";
 
 export default function EditCabin({ cabin }) {
+  // console.log("edit", cabin);
+
   return (
     <Modal>
       <Modal.Opens opensWindowName="edit-form">
