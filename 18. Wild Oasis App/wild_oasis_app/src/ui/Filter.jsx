@@ -1,3 +1,5 @@
+// import { NavLink } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 const StyledFilter = styled.div`
@@ -33,3 +35,44 @@ const FilterButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+// to make this dynamic, we pass the field and the Filter Options
+function Filter({ fieldName, options }) {
+  const [urlState, setUrlState] = useSearchParams();
+  const filter = urlState.get(fieldName) || options[0].value;
+
+  function handleClick(option) {
+    // console.log("click", discount);
+    // setUrlState({ filter: discount });
+    urlState.set(fieldName, option);
+    setUrlState(urlState);
+  }
+  return (
+    <StyledFilter>
+      {options.map((option) => (
+        <FilterButton
+          onClick={() => handleClick(option.value)}
+          active={filter == option.value}
+          key={option.value}
+        >
+          {option.label}
+        </FilterButton>
+      ))}
+    </StyledFilter>
+  );
+}
+
+// // 3. Children Components
+// function Button({ children, type }) {
+//   function handleClick() {
+//     console.log("type", type);
+//   }
+
+//   return (
+//     <FilterButton onClick={handleClick}>
+//       <NavLink to={`?filter=true`}>{children}</NavLink>
+//     </FilterButton>
+//   );
+// }
+
+export default Filter;

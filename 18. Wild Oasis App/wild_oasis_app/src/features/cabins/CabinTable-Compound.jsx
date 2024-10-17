@@ -8,6 +8,7 @@ import CabinRow from "./CabinRow";
 import useGetCabins from "./useGetCabins";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
+import { useSearchParams } from "react-router-dom";
 
 // const TableHeader = styled.header`
 //   display: grid;
@@ -38,6 +39,11 @@ function CabinTable() {
   //   queryFn: getCabins,
   // });
 
+  // we use the useSearchParams to get the URL STATE
+  const [urlState, setUrlState] = useSearchParams();
+
+  const filterValue = urlState.get("discount") || "all";
+
   // we use a custom hook to get the data
   const { isPending, isError, cabins, error } = useGetCabins();
 
@@ -49,7 +55,19 @@ function CabinTable() {
     return <span>Error ... {error.message}</span>;
   }
 
-  // console.log("data", cabins);
+  // filter the data according to the URL Filter state
+  let filteredCabins = cabins.filter((item) => {
+    switch (filterValue) {
+      case "all":
+        return item;
+      case "no-discount":
+        return item.discount === 0;
+      case "yes-discount":
+        return item.discount > 0;
+    }
+  });
+
+  // console.log("data", filteredData);
 
   return (
     <Table columnsa="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr 1fr">
@@ -65,7 +83,7 @@ function CabinTable() {
 
       {/* we wrap all rows in the MENUS context to track which menu is open. Only 1 at a time */}
       <Menus>
-        {cabins.map((cabin) => (
+        {filteredCabins.map((cabin) => (
           <CabinRow cabin={cabin} key={cabin.id} />
         ))}
       </Menus>
