@@ -84,7 +84,7 @@ export default function Table({ children, columnsa }) {
 // 3. Child Components
 function Header({ children }) {
   const { columns } = useContext(TableContext);
-  console.log("columns", columns);
+  // console.log("columns", columns);
   return <StyledHeader columns={columns}>{children}</StyledHeader>;
 }
 

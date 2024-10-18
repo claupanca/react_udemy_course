@@ -43,6 +43,11 @@ function CabinTable() {
   const [urlState, setUrlState] = useSearchParams();
 
   const filterValue = urlState.get("discount") || "all";
+  const sortBy =
+    urlState.get("sortBy") === "price"
+      ? "regularPrice"
+      : urlState.get("sortBy");
+  const orderAs = urlState.get("order");
 
   // we use a custom hook to get the data
   const { isPending, isError, cabins, error } = useGetCabins();
@@ -67,6 +72,25 @@ function CabinTable() {
     }
   });
 
+  // sort the filtered data according to the URL Sort and order values
+  function sortCabins(a, b) {
+    if (orderAs === "asc") {
+      if (a[sortBy] < b[sortBy]) {
+        return -1;
+      }
+      if (a[sortBy] > b[sortBy]) return 1;
+    }
+    if (orderAs === "desc") {
+      if (a[sortBy] > b[sortBy]) {
+        return -1;
+      }
+      if (a[sortBy] < b[sortBy]) return 1;
+    }
+  }
+
+  // sorting happens in place, no copy is made
+  filteredCabins.sort(sortCabins);
+
   // console.log("data", filteredData);
 
   return (
@@ -75,7 +99,7 @@ function CabinTable() {
         <div>Img</div>
         <div>Cabin</div>
         <div>Adults</div>
-        <div>Children</div>
+        <div>Childrens</div>
         <div>Price</div>
         <div>Discount</div>
         <div>_</div>

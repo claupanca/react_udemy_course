@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useContext } from "react";
 import { createContext } from "react";
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { GrMore } from "react-icons/gr";
 import useOutsideClick from "../hooks/useOutsideClick";
@@ -46,9 +46,18 @@ const StyledList = styled.ul`
 `;
 
 const StyledButton = styled.button`
+  ${(props) =>
+    props.active &&
+    css`
+      background-color: var(--color-brand-600);
+      color: var(--color-brand-50);
+      margin: 0.4rem;
+      border-radius: var(--border-radius-sm);
+    `}
+
   width: 100%;
   text-align: left;
-  background: none;
+  /* background: none; */
   border: none;
   padding: 1.2rem 2.4rem;
   font-size: 1.4rem;
@@ -150,7 +159,7 @@ function List({ children, id }) {
   );
 }
 
-function Button({ children, onClick, icon }) {
+function Button({ children, onClick, icon, active }) {
   const { close } = useContext(MenusContext);
 
   function handleClick() {
@@ -161,7 +170,7 @@ function Button({ children, onClick, icon }) {
 
   return (
     <li>
-      <StyledButton onClick={handleClick}>
+      <StyledButton onClick={handleClick} active={active}>
         {icon}
         <span>{children}</span>
       </StyledButton>
@@ -188,6 +197,7 @@ Button.propTypes = {
   ...childrenProp,
   onClick: PropTypes.func,
   icon: PropTypes.node,
+  active: PropTypes.bool,
 };
 
 export default Menus;

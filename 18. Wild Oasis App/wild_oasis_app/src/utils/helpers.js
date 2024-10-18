@@ -28,3 +28,6 @@ export const formatCurrency = (value) =>
   new Intl.NumberFormat("en", { style: "currency", currency: "USD" }).format(
     value
   );
+
+export const capizalize = (word) =>
+  word.charAt(0).toUpperCase() + word.slice(1);
