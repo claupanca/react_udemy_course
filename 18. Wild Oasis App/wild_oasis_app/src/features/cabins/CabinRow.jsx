@@ -57,13 +57,7 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-const Adults = styled.div`
-  font-family: "Sono";
-  font-weight: 500;
-  color: var(--color-green-700);
-`;
-
-const Children = styled.div`
+const MaxCapacity = styled.div`
   font-family: "Sono";
   font-weight: 500;
   color: var(--color-green-700);
@@ -78,7 +72,7 @@ const Children = styled.div`
 export default function CabinRow({ cabin }) {
   // const [showForm, setShowForm] = useState(false);
 
-  const { name, adults, childrens, regularPrice, discount, photo, id } = cabin;
+  const { name, maxCapacity, regularPrice, discount, photo, id } = cabin;
 
   // We have created a CUSTOM HOOK for DELETE
   const { isDeleting, deleteCabin } = useDeleteCabin();
@@ -105,8 +99,7 @@ export default function CabinRow({ cabin }) {
     console.log("Duplicate Cabin");
     createEdit({
       name: `Copy of ${cabin.name}`,
-      adults,
-      childrens,
+      maxCapacity,
       discount,
       regularPrice,
       photo,
@@ -122,8 +115,7 @@ export default function CabinRow({ cabin }) {
     <Table.Row role="row">
       <Img src={photo} />
       <Cabin>{name}</Cabin>
-      <Adults>{adults}</Adults>
-      <Children>{childrens}</Children>
+      <MaxCapacity>{maxCapacity}</MaxCapacity>
       <Price>{formatCurrency(regularPrice)}</Price>
       {discount ? (
         <Discount>{formatCurrency(discount)}</Discount>

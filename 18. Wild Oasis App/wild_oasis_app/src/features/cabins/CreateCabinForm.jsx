@@ -15,16 +15,8 @@ import Input from "../../ui/Input";
 
 function CreateCabinForm({ onCloseModal, cabinToEdit = {} }) {
   // we are using these for edit a cabin that we will pass into the useForm react hook
-  const {
-    name,
-    adults,
-    childrens,
-    description,
-    regularPrice,
-    discount,
-    photo,
-    id,
-  } = cabinToEdit;
+  const { name, maxCapacity, description, regularPrice, discount, photo, id } =
+    cabinToEdit;
 
   const isEditSession = Boolean(id);
 
@@ -33,8 +25,7 @@ function CreateCabinForm({ onCloseModal, cabinToEdit = {} }) {
   const { register, handleSubmit, getValues, formState } = useForm({
     defaultValues: {
       name: name,
-      adults: adults,
-      childrens: childrens,
+      maxCapacity: maxCapacity,
       regularPrice: regularPrice,
       description: description,
       discount: discount,
@@ -80,8 +71,8 @@ function CreateCabinForm({ onCloseModal, cabinToEdit = {} }) {
     // passing the reset() from React Form, we will reset the form here, not inside the createEdit logic
   }
 
-  function onError() {
-    // console.log("error", error);
+  function onError(error) {
+    console.log("error", error);
   }
 
   return (
@@ -99,25 +90,17 @@ function CreateCabinForm({ onCloseModal, cabinToEdit = {} }) {
         />
       </FormRow>
 
-      <FormRow label="Adults" error={errors?.adults?.message}>
+      <FormRow label="Max Capacity" error={errors?.maxCapacity?.message}>
         <Input
           type="number"
-          id="adults"
-          {...register("adults", {
+          id="maxCapacity"
+          {...register("maxCapacity", {
             required: true,
             min: {
               value: 2,
               message: "There is a minimum capacity of 2",
             },
           })}
-        />
-      </FormRow>
-
-      <FormRow label="Childrens" error={errors?.childrens?.message}>
-        <Input
-          type="number"
-          id="childrens"
-          {...register("childrens", { required: true })}
         />
       </FormRow>
 

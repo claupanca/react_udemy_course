@@ -46,6 +46,8 @@ function CabinTable() {
   const sortBy =
     urlState.get("sortBy") === "price"
       ? "regularPrice"
+      : urlState.get("sortBy") === "max-capacity"
+      ? "maxCapacity"
       : urlState.get("sortBy");
   const orderAs = urlState.get("order");
 
@@ -94,12 +96,11 @@ function CabinTable() {
   // console.log("data", filteredData);
 
   return (
-    <Table columnsa="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr 1fr">
+    <Table columnsa="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
       <Table.Header role="row">
         <div>Img</div>
         <div>Cabin</div>
-        <div>Adults</div>
-        <div>Childrens</div>
+        <div>Max Cap</div>
         <div>Price</div>
         <div>Discount</div>
         <div>_</div>

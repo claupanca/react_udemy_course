@@ -17,7 +17,7 @@ export default function useEditAddCabin(isEditSession, id) {
       // reset();
     },
     onError: (error) => {
-      // console.log("error", error);
+      console.log("error", error);
       toast.error(error.message);
     },
   });

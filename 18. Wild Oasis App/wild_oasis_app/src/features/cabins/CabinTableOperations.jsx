@@ -13,7 +13,7 @@ function CabinTableOperations() {
           { label: "With Discount", value: "yes-discount" },
         ]}
       />
-      <SortBy options={["adults", "childrens", "price", "discount"]} />
+      <SortBy options={["max-capacity", "price", "discount"]} />
     </TableOperations>
   );
 }
