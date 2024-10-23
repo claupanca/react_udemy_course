@@ -2,7 +2,13 @@ import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
 export async function getBookings() {
-  const { data, error } = await supabase.from("bookings").select("*");
+  // with select("*") we select only the bookings table
+  // const { data, error } = await supabase.from("bookings").select("*");
+
+  // now we select the bookings table and also everything from cabins and guests
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*,cabins(*),guests(*)");
 
   if (error) {
     console.error(error);
