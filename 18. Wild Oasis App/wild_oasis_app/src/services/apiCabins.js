@@ -24,8 +24,9 @@ export async function deleteCabin(id) {
 
 // add a new cabin / Update an existing cabin
 export async function addEditCabin(information, editID) {
+  // console.log("information", information);
   // we create a UNIQUE NAME for the image
-  const imageName = `${Math.random()}-${information.photo.name}`.replace(
+  const imageName = `${Math.random()}-${information.image.name}`.replace(
     "/",
     ""
   );
@@ -38,7 +39,7 @@ export async function addEditCabin(information, editID) {
   if (editID) {
     let { data, error } = await supabase
       .from("cabins")
-      .update({ ...information, photo: imagePath })
+      .update({ ...information, image: imagePath })
       .eq("id", editID);
 
     if (error) {
@@ -50,7 +51,7 @@ export async function addEditCabin(information, editID) {
     // 1. Create Cabin
     let { data, error } = await supabase
       .from("cabins")
-      .insert([{ ...information, photo: imagePath }]);
+      .insert([{ ...information, image: imagePath }]);
 
     if (error) {
       throw new Error("Cannot add the new cabin");
@@ -59,7 +60,7 @@ export async function addEditCabin(information, editID) {
     // 2. Upload the image
     const { storageError } = await supabase.storage
       .from("cabin-images")
-      .upload(imageName, information.photo);
+      .upload(imageName, information.image);
 
     // 3. Delete the cabin if there was an error uploading the image
     if (storageError) {

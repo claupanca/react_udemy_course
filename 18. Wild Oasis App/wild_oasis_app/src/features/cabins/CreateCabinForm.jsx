@@ -15,7 +15,7 @@ import Input from "../../ui/Input";
 
 function CreateCabinForm({ onCloseModal, cabinToEdit = {} }) {
   // we are using these for edit a cabin that we will pass into the useForm react hook
-  const { name, maxCapacity, description, regularPrice, discount, photo, id } =
+  const { name, maxCapacity, description, regularPrice, discount, image, id } =
     cabinToEdit;
 
   const isEditSession = Boolean(id);
@@ -29,7 +29,7 @@ function CreateCabinForm({ onCloseModal, cabinToEdit = {} }) {
       regularPrice: regularPrice,
       description: description,
       discount: discount,
-      photo: photo,
+      image: image,
     },
   });
 
@@ -61,11 +61,11 @@ function CreateCabinForm({ onCloseModal, cabinToEdit = {} }) {
   // });
 
   function onSubmit(data) {
-    console.log("formData", data);
+    // console.log("formData", data);
     // we can also access the onSuccess function of React Query in the mutate(createEdit) function
     // createEdit({ ...data, photo: data.photo[0] }, { onSuccess: () => reset() });
     createEdit(
-      { ...data, photo: data.photo[0] },
+      { ...data, image: data.image[0] },
       { onSuccess: () => onCloseModal?.() }
     );
     // passing the reset() from React Form, we will reset the form here, not inside the createEdit logic
@@ -139,7 +139,7 @@ function CreateCabinForm({ onCloseModal, cabinToEdit = {} }) {
           id="image"
           accept="image/*"
           error={errors?.image?.message}
-          {...register("photo", {
+          {...register("image", {
             required: isEditSession ? false : "This field is required",
           })}
         />

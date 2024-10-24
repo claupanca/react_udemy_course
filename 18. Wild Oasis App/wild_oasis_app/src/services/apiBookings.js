@@ -1,14 +1,30 @@
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings() {
+export async function getBookings({ filter, sort }) {
   // with select("*") we select only the bookings table
   // const { data, error } = await supabase.from("bookings").select("*");
 
+  // console.log("filter", filter);
+  // console.log("sort", sort);
+
   // now we select the bookings table and also everything from cabins and guests
-  const { data, error } = await supabase
-    .from("bookings")
-    .select("*,cabins(*),guests(*)");
+  // const { data, error } = await supabase
+  //   .from("bookings")
+  //   .select("*,cabins(*),guests(*)");
+
+  // to conditionally get data, we will create a query variable and modify it and use it after
+  // initial query
+  let query = supabase.from("bookings").select("*,cabins(*),guests(*)");
+
+  //  modify query based on the filter
+  query = !filter ? query : query.eq(filter.filterBy, filter.filterValue);
+
+  // modify query based on the sort order
+  query = !sort ? query : query.order(sort.sortBy, { ascending: sort.order });
+
+  // use the new query
+  const { data, error } = await query;
 
   if (error) {
     console.error(error);

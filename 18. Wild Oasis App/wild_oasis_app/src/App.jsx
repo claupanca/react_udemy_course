@@ -83,7 +83,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       {/* Floating Dev Tools */}
-      <ReactQueryDevtools initialIsOpen={open} />
+      <ReactQueryDevtools initialIsOpen={"open"} />
       {/* FIxed element Dev Tools */}
       {/* <ReactQueryDevtoolsPanel setIsOpen={true} /> */}
       <Toaster />

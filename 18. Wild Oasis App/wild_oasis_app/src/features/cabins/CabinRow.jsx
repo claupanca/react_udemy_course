@@ -72,7 +72,7 @@ const MaxCapacity = styled.div`
 export default function CabinRow({ cabin }) {
   // const [showForm, setShowForm] = useState(false);
 
-  const { name, maxCapacity, regularPrice, discount, photo, id } = cabin;
+  const { name, maxCapacity, regularPrice, discount, image, id } = cabin;
 
   // We have created a CUSTOM HOOK for DELETE
   const { isDeleting, deleteCabin } = useDeleteCabin();
@@ -102,7 +102,7 @@ export default function CabinRow({ cabin }) {
       maxCapacity,
       discount,
       regularPrice,
-      photo,
+      image,
       // photo: cabin.photo,
     });
   }
@@ -113,7 +113,7 @@ export default function CabinRow({ cabin }) {
 
   return (
     <Table.Row role="row">
-      <Img src={photo} />
+      <Img src={image} />
       <Cabin>{name}</Cabin>
       <MaxCapacity>{maxCapacity}</MaxCapacity>
       <Price>{formatCurrency(regularPrice)}</Price>
