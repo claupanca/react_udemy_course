@@ -1,4 +1,7 @@
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import page_size from "../utils/constants";
 
 const StyledPagination = styled.div`
   width: 100%;
@@ -55,3 +58,52 @@ const PaginationButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+export default function Pagination({ totalResults }) {
+  const [urlState, setUrlState] = useSearchParams();
+
+  const currentPage = !urlState.get("page") ? 1 : Number(urlState.get("page"));
+  // console.log("page", currentPage);
+
+  // console.log("totalReslts", totalResults, totalResults / 10);
+  // Compute the total number of pages
+  const totalPages = Math.ceil(Number(totalResults) / page_size());
+  // console.log("totalPages", totalPages);
+
+  function handleNextPage() {
+    if (currentPage === totalPages) return;
+    urlState.set("page", currentPage + 1);
+    setUrlState(urlState);
+  }
+
+  function handlePrevPage() {
+    if (currentPage === 1) return;
+    urlState.set("page", currentPage - 1);
+    setUrlState(urlState);
+  }
+
+  return (
+    <StyledPagination>
+      <P>
+        Showing <span>{currentPage * page_size() - page_size() + 1} </span>to{" "}
+        <span>
+          {currentPage * page_size() > totalResults
+            ? totalResults
+            : currentPage * page_size()}
+        </span>{" "}
+        of <span>{totalResults}</span> results
+      </P>
+      <Buttons>
+        <PaginationButton onClick={handlePrevPage}>
+          <GrFormPrevious /> Previous
+        </PaginationButton>
+        <PaginationButton onClick={handleNextPage}>
+          Next
+          <GrFormNext />
+        </PaginationButton>
+        {/* <PaginationButton>2</PaginationButton>
+        <PaginationButton>3</PaginationButton> */}
+      </Buttons>
+    </StyledPagination>
+  );
+}

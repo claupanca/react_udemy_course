@@ -1,7 +1,7 @@
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings({ filter, sort }) {
+export async function getBookings({ filter, sort, pagination }) {
   // with select("*") we select only the bookings table
   // const { data, error } = await supabase.from("bookings").select("*");
 
@@ -14,8 +14,10 @@ export async function getBookings({ filter, sort }) {
   //   .select("*,cabins(*),guests(*)");
 
   // to conditionally get data, we will create a query variable and modify it and use it after
-  // initial query
-  let query = supabase.from("bookings").select("*,cabins(*),guests(*)");
+  // initial query --> {count:'exact'} get's use number of all rows
+  let query = supabase
+    .from("bookings")
+    .select("*,cabins(*),guests(*)", { count: "exact" });
 
   //  modify query based on the filter
   query = !filter ? query : query.eq(filter.filterBy, filter.filterValue);
@@ -23,15 +25,18 @@ export async function getBookings({ filter, sort }) {
   // modify query based on the sort order
   query = !sort ? query : query.order(sort.sortBy, { ascending: sort.order });
 
+  // modify query based on the pagination
+  query = query.range(pagination.start, pagination.end);
+
   // use the new query
-  const { data, error } = await query;
+  const { data, error, count } = await query;
 
   if (error) {
     console.error(error);
     throw new Error("Booking not found");
   }
 
-  return data;
+  return { data, count };
 }
 
 export async function getBooking(id) {

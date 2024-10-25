@@ -4,6 +4,7 @@ import Menus from "../../ui/Menus";
 
 import Spinner from "../../ui/Spinner";
 import useGetBookings from "./useGetBookings";
+import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
   const { isPending, error, bookings, isError } = useGetBookings();
@@ -31,10 +32,14 @@ function BookingTable() {
         </Table.Header>
 
         <Table.Body>
-          {bookings.map((booking) => (
+          {bookings.data.map((booking) => (
             <BookingRow booking={booking} key={booking.id} />
           ))}
         </Table.Body>
+
+        <Table.Footer>
+          <Pagination totalResults={bookings.count} />
+        </Table.Footer>
       </Table>
     </Menus>
   );

@@ -101,8 +101,8 @@ function Body({ children }) {
   return <StyledBody>{children}</StyledBody>;
 }
 
-function TableFooter() {
-  return <Footer>Footer</Footer>;
+function TableFooter({ children }) {
+  return <Footer>{children}</Footer>;
 }
 
 Table.Header = Header;
