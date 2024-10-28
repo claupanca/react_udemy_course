@@ -28,6 +28,8 @@ export async function getBookings({ filter, sort, pagination }) {
   // modify query based on the pagination
   query = query.range(pagination.start, pagination.end);
 
+  console.log("query", query, pagination);
+
   // use the new query
   const { data, error, count } = await query;
 
