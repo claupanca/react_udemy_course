@@ -43,7 +43,7 @@ function Filter({ fieldName, options }) {
 
   function handleClick(option) {
     // console.log("click", discount);
-    console.log("click", option);
+    // console.log("click", option);
     // setUrlState({ filter: discount });
     urlState.set(fieldName, option);
     // reset the pagination
