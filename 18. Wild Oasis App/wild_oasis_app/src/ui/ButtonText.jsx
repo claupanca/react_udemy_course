@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const ButtonText = styled.button`
   color: var(--color-brand-600);
@@ -8,6 +8,9 @@ const ButtonText = styled.button`
   background: none;
   border: none;
   border-radius: var(--border-radius-sm);
+
+  display: flex;
+  align-items: center;
 
   &:hover,
   &:active {

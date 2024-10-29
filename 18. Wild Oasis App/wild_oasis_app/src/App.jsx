@@ -17,6 +17,8 @@ import Users from "./pages/Users";
 import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 
+import Booking from "./pages/Booking";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   ReactQueryDevtools,
@@ -72,6 +74,7 @@ function App() {
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="bookings" element={<Bookings />} />
+            <Route path="bookings/:id" element={<Booking />} />
             <Route path="cabins" element={<Cabins />} />
             <Route path="settings" element={<Settings />} />
             <Route path="account" element={<Account />} />
