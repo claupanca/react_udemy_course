@@ -9,7 +9,7 @@ import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getBooking } from "../../services/apiBookings";
 import useGetBooking from "./useGetBooking";
@@ -27,6 +27,7 @@ function BookingDetail() {
   // const status = "checked-in";
 
   const moveBack = useMoveBack();
+  const navigate = useNavigate();
 
   // fetch the data usint the URL State from the useParams()
   const urlState = useParams();
@@ -34,7 +35,7 @@ function BookingDetail() {
   const bookingId = urlState.id;
 
   const { isLoading, isError, error, booking } = useGetBooking(bookingId);
-  console.log("booking", booking);
+  // console.log("booking", booking);
   const status = booking?.status;
 
   const statusToTagName = {
@@ -64,6 +65,14 @@ function BookingDetail() {
       <BookingDataBox booking={booking} />
 
       <ButtonGroup>
+        {status == "unconfirmed" && (
+          <Button
+            variation="primary"
+            onClick={() => navigate(`/checkin/${bookingId}`)}
+          >
+            Check In
+          </Button>
+        )}
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>

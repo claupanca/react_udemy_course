@@ -25,6 +25,7 @@ import {
   // ReactQueryDevtoolsPanel,
 } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
+import CheckInOut from "./pages/CheckInOut";
 
 // React Query
 const queryClient = new QueryClient({
@@ -75,6 +76,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="bookings" element={<Bookings />} />
             <Route path="bookings/:id" element={<Booking />} />
+            <Route path="checkin/:id" element={<CheckInOut />} />
             <Route path="cabins" element={<Cabins />} />
             <Route path="settings" element={<Settings />} />
             <Route path="account" element={<Account />} />

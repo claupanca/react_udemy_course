@@ -7,7 +7,7 @@ import Table from "../../ui/Table";
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 import Menus from "../../ui/Menus";
-import { GrView } from "react-icons/gr";
+import { GrCheckmark, GrView } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 
 const Cabin = styled.div`
@@ -90,12 +90,23 @@ function BookingRow({
 
         <Menus.List id={bookingId}>
           {/* on click, we want to NAVIGATE to the booking page */}
+          {/* booking details page */}
           <Menus.Button
             onClick={() => navigate(`/bookings/${bookingId}`)}
             icon={<GrView />}
           >
             Booking Details
           </Menus.Button>
+
+          {/* Checkin in Option  */}
+          {status == "unconfirmed" && (
+            <Menus.Button
+              onClick={() => navigate(`/checkin/${bookingId}`)}
+              icon={<GrCheckmark />}
+            >
+              Check-In
+            </Menus.Button>
+          )}
           {/* <Menus.Button>456</Menus.Button>
           <Menus.Button>789</Menus.Button> */}
         </Menus.List>
