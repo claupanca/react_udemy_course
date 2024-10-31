@@ -7,8 +7,9 @@ import Table from "../../ui/Table";
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 import Menus from "../../ui/Menus";
-import { GrCheckmark, GrView } from "react-icons/gr";
+import { GrCheckmark, GrView, GrUserAdmin } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
+import useUpdateBooking from "../check-in-out/useUpdateBooking";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -57,7 +58,13 @@ function BookingRow({
     "checked-out": "silver",
   };
 
+  const { mutate, updateLoading } = useUpdateBooking();
+
   const navigate = useNavigate();
+
+  function handleCheckOut() {
+    mutate({ bookingId, data: { status: "checked-out" } });
+  }
 
   return (
     <Table.Row>
@@ -105,6 +112,13 @@ function BookingRow({
               icon={<GrCheckmark />}
             >
               Check-In
+            </Menus.Button>
+          )}
+
+          {/* checkout option */}
+          {status === "checked-in" && (
+            <Menus.Button onClick={handleCheckOut} icon={<GrUserAdmin />}>
+              Check-out
             </Menus.Button>
           )}
           {/* <Menus.Button>456</Menus.Button>

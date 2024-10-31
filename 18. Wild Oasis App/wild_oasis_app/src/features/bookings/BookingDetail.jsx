@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getBooking } from "../../services/apiBookings";
 import useGetBooking from "./useGetBooking";
 import Spinner from "../../ui/Spinner";
+import useUpdateBooking from "../check-in-out/useUpdateBooking";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -44,6 +45,12 @@ function BookingDetail() {
     "checked-out": "silver",
   };
 
+  const { mutate, updateLoading } = useUpdateBooking();
+
+  function handleCheckOut() {
+    mutate({ bookingId, data: { status: "checked-out" } });
+  }
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -65,6 +72,12 @@ function BookingDetail() {
       <BookingDataBox booking={booking} />
 
       <ButtonGroup>
+        {status === "checked-in" && (
+          <Button variation="primary" onClick={handleCheckOut}>
+            Check Out
+          </Button>
+        )}
+
         {status == "unconfirmed" && (
           <Button
             variation="primary"
@@ -73,6 +86,7 @@ function BookingDetail() {
             Check In
           </Button>
         )}
+
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>
