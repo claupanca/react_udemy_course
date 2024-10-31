@@ -52,28 +52,28 @@ export default function useGetBookings() {
   const queryClient = useQueryClient();
 
   // we use the prefetchQuery function
-  queryClient.prefetchQuery({
-    queryKey: [
-      "bookings",
-      filter,
-      sort,
-      (pagination = {
-        start: pagination.start + page_size(),
-        end: pagination.end + page_size(),
-      }),
-    ],
-    // we need to prefetch the page + 1 data
-    queryFn: () =>
-      getBookings({
-        filter,
-        sort,
-        pagination: {
-          start: pagination.start + page_size(),
-          end: pagination.end + page_size(),
-        },
-        // pagination,
-      }),
-  });
+  // queryClient.prefetchQuery({
+  //   queryKey: [
+  //     "bookings",
+  //     filter,
+  //     sort,
+  //     (pagination = {
+  //       start: pagination.start + page_size(),
+  //       end: pagination.end + page_size(),
+  //     }),
+  //   ],
+  //   // we need to prefetch the page + 1 data
+  //   queryFn: () =>
+  //     getBookings({
+  //       filter,
+  //       sort,
+  //       pagination: {
+  //         start: pagination.start + page_size(),
+  //         end: pagination.end + page_size(),
+  //       },
+  //       // pagination,
+  //     }),
+  // });
 
   return { isPending, error, bookings, isError };
 }

@@ -12,8 +12,9 @@ import useGetBooking from "../bookings/useGetBooking";
 import { useParams } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
 import { useEffect, useState } from "react";
-import { getBookings } from "../../services/apiBookings";
+import { getBookings, updateBooking } from "../../services/apiBookings";
 import Checkbox from "../../ui/Checkbox";
+import useUpdateBooking from "./useUpdateBooking";
 
 const Box = styled.div`
   /* Box */
@@ -29,6 +30,8 @@ function CheckinBooking() {
   const moveBack = useMoveBack();
 
   const urlState = useParams();
+
+  const mutation = useUpdateBooking();
 
   const { isLoading, isError, error, booking } = useGetBooking(urlState.id);
 
@@ -54,9 +57,13 @@ function CheckinBooking() {
     hasBreakfast,
     numNights,
     isPaid,
+    status,
   } = booking;
 
-  function handleCheckin() {}
+  function handleCheckin() {
+    mutation.mutate(bookingId);
+    // mutation.mutate(bookingId, { status: "checked-in" });
+  }
 
   return (
     <>
@@ -80,7 +87,7 @@ function CheckinBooking() {
       </Box>
 
       <ButtonGroup>
-        {bookingPaid && (
+        {bookingPaid && status === "unconfirmed" && (
           <Button onClick={handleCheckin}>Check in booking #{bookingId}</Button>
         )}
         <Button variation="secondary" onClick={moveBack}>
