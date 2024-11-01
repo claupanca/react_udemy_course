@@ -7,7 +7,13 @@ import Table from "../../ui/Table";
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 import Menus from "../../ui/Menus";
-import { GrCheckmark, GrView, GrUserAdmin } from "react-icons/gr";
+import {
+  GrCheckmark,
+  GrView,
+  GrUserAdmin,
+  GrFormTrash,
+  GrTrash,
+} from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import useUpdateBooking from "../check-in-out/useUpdateBooking";
 
@@ -66,6 +72,8 @@ function BookingRow({
     mutate({ bookingId, data: { status: "checked-out" } });
   }
 
+  function handleDeleteBooking() {}
+
   return (
     <Table.Row>
       <Cabin>{cabinName}</Cabin>
@@ -121,6 +129,12 @@ function BookingRow({
               Check-out
             </Menus.Button>
           )}
+
+          {/* delete option */}
+          <Menus.Button onClick={handleDeleteBooking} icon={<GrTrash />}>
+            Delete Booking
+          </Menus.Button>
+
           {/* <Menus.Button>456</Menus.Button>
           <Menus.Button>789</Menus.Button> */}
         </Menus.List>
