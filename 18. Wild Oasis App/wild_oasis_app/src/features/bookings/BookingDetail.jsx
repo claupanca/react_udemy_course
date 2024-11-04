@@ -15,6 +15,7 @@ import { getBooking } from "../../services/apiBookings";
 import useGetBooking from "./useGetBooking";
 import Spinner from "../../ui/Spinner";
 import useUpdateBooking from "../check-in-out/useUpdateBooking";
+import useDeleteBooking from "./useDeleteBooking";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -45,13 +46,20 @@ function BookingDetail() {
     "checked-out": "silver",
   };
 
+  const { mutate: deleteBooking, isLoading: deleteLoading } =
+    useDeleteBooking();
+
   const { mutate, updateLoading } = useUpdateBooking();
 
   function handleCheckOut() {
     mutate({ bookingId, data: { status: "checked-out" } });
   }
 
-  if (isLoading) {
+  function handleDeleteBooking() {
+    deleteBooking(bookingId);
+  }
+
+  if (isLoading || deleteLoading) {
     return <Spinner />;
   }
 
@@ -84,6 +92,12 @@ function BookingDetail() {
             onClick={() => navigate(`/checkin/${bookingId}`)}
           >
             Check In
+          </Button>
+        )}
+
+        {status === "checked-out" && (
+          <Button variation="primary" onClick={handleDeleteBooking}>
+            Delete
           </Button>
         )}
 

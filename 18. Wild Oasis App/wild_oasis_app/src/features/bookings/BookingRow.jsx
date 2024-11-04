@@ -16,6 +16,7 @@ import {
 } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import useUpdateBooking from "../check-in-out/useUpdateBooking";
+import useDeleteBooking from "./useDeleteBooking";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -66,13 +67,17 @@ function BookingRow({
 
   const { mutate, updateLoading } = useUpdateBooking();
 
+  const { mutate: deleteBooking, isLoading } = useDeleteBooking();
+
   const navigate = useNavigate();
 
   function handleCheckOut() {
     mutate({ bookingId, data: { status: "checked-out" } });
   }
 
-  function handleDeleteBooking() {}
+  function handleDeleteBooking() {
+    deleteBooking(bookingId);
+  }
 
   return (
     <Table.Row>
