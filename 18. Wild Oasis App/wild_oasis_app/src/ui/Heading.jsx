@@ -6,21 +6,21 @@ const Heading = styled.h1`
     css`
       font-size: 3rem;
       font-weight: 600;
-      background-color: yellow;
+      /* background-color: yellow; */
     `}
   ${(props) =>
     props.type === "h2" &&
     css`
       font-size: 2rem;
       font-weight: 600;
-      background-color: yellow;
+      /* background-color: yellow; */
     `}
     ${(props) =>
     props.type === "h3" &&
     css`
       font-size: 1rem;
       font-weight: 600;
-      background-color: yellow;
+      /* background-color: yellow; */
     `}
   
 
