@@ -50,6 +50,6 @@ export default function FormRow({ label, error, children }) {
 
 FormRow.propTypes = {
   label: PropTypes.string,
-  error: PropTypes.object,
+  error: PropTypes.string,
   children: PropTypes.node,
 };
