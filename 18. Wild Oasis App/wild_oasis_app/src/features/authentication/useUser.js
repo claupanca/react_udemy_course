@@ -3,16 +3,21 @@ import { getCurrentUser } from "../../services/apiAuth";
 
 // we are using this to STORE the user data from DB
 export default function useUser() {
-  const { data: user, isLoading } = useQuery({
+  const {
+    data: user,
+    isLoading,
+    isFetching,
+  } = useQuery({
     queryKey: ["user"],
     queryFn: getCurrentUser,
   });
 
-  // console.log("data", data);
+  // console.log("data", user);
   // if the user is authenticated, we compute the data here directly
   return {
     user,
     isLoading,
     isAuthenticated: user?.role === "authenticated" ? true : false,
+    isFetching,
   };
 }

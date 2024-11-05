@@ -19,6 +19,9 @@ export default function ProtectedRoute({ children }) {
   const { user, isLoading, isAuthenticated } = useUser();
   // console.log("user", user);
   // console.log("isLoading", isLoading);
+  // console.log("isFetching", isFetching);
+  // console.log("isAuth", isAuthenticated);
+  // console.log("isLoading", isLoading);
 
   // 3. If there is no user or the user is no authenticated, redirect to LOGIN PAGE
   // we can call navigate in another function or in a useEffect
@@ -39,6 +42,7 @@ export default function ProtectedRoute({ children }) {
 
   // 4. If the user is AUTH, render the app
   if (isAuthenticated) {
+    // console.log("auth");
     return children;
   }
 }

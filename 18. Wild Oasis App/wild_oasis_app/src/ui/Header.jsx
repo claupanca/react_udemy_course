@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import Logo from "../ui/Logo";
+import LogOut from "../features/authentication/LogOut";
 
 const StyledHeader = styled.header`
   background-color: var(--color-grey-0);
@@ -10,12 +11,14 @@ const StyledHeader = styled.header`
   grid-column: 1 / end;
 
   display: flex;
+  justify-content: space-between;
 `;
 
 function Header() {
   return (
     <StyledHeader>
       <Logo />
+      <LogOut />
     </StyledHeader>
   );
 }

@@ -10,6 +10,7 @@ export async function login({ email, password }) {
     throw new Error(error.message);
   }
 
+  // console.log("login", data);
   return data;
 }
 
@@ -17,6 +18,7 @@ export async function login({ email, password }) {
 export async function getCurrentUser() {
   // check if there is an active session using data from local storage
   const { data: session } = await supabase.auth.getSession();
+  // console.log("session", session);
   if (!session.session) return null;
 
   // refetch the user data from supabase
@@ -29,4 +31,9 @@ export async function getCurrentUser() {
 
   // we return only the USER, not the whole session
   return user?.user;
+}
+
+export async function logout() {
+  const { error } = await supabase.auth.signOut();
+  console.log("error", error);
 }
