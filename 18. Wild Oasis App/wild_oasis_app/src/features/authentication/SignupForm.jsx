@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
+import useSignUp from "./useSignUp";
 
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+import SpinnerMini from "../../ui/SpinnerMini";
 
 // Email regex: /\S+@\S+\.\S+/
 
@@ -12,14 +14,24 @@ function SignupForm() {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm();
+    reset,
+  } = useForm({
+    // we use this to check for errors when the field looses blur
+    mode: "onBlur",
+  });
+
+  const { userSignUp, isPending } = useSignUp();
 
   const onSubmit = (values) => {
     console.log("submit");
     console.log("values", values);
+    userSignUp({ email: values.email, password: values.password });
   };
 
-  console.log("errors", errors);
+  function handleReset() {
+    // we use this to also clear the errors
+    reset({}, { clearErrors: true });
+  }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -67,10 +79,11 @@ function SignupForm() {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        {/* <Button variation="secondary" type="reset"> */}
+        <Button type="reset" variation="secondary" onClick={handleReset}>
           Cancel
         </Button>
-        <Button>Create new user</Button>
+        <Button>{!isPending ? `Create new user` : <SpinnerMini />}</Button>
       </FormRow>
     </Form>
   );
