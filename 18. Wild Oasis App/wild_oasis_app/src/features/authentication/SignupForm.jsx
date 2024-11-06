@@ -23,9 +23,16 @@ function SignupForm() {
   const { userSignUp, isPending } = useSignUp();
 
   const onSubmit = (values) => {
-    console.log("submit");
-    console.log("values", values);
-    userSignUp({ email: values.email, password: values.password });
+    // console.log("submit");
+    // console.log("values", values);
+    userSignUp(
+      {
+        email: values.email,
+        password: values.password,
+        fullName: values.fullName,
+      },
+      { onSettled: reset }
+    );
   };
 
   function handleReset() {

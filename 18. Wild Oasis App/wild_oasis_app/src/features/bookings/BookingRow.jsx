@@ -136,9 +136,11 @@ function BookingRow({
           )}
 
           {/* delete option */}
-          <Menus.Button onClick={handleDeleteBooking} icon={<GrTrash />}>
-            Delete Booking
-          </Menus.Button>
+          {status === "checked-out" && (
+            <Menus.Button onClick={handleDeleteBooking} icon={<GrTrash />}>
+              Delete Booking
+            </Menus.Button>
+          )}
 
           {/* <Menus.Button>456</Menus.Button>
           <Menus.Button>789</Menus.Button> */}
