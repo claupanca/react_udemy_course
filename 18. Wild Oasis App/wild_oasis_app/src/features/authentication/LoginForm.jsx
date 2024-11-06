@@ -11,8 +11,8 @@ function LoginForm() {
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
   // default for development
-  const [email, setEmail] = useState("a@b.com");
-  const [password, setPassword] = useState("a@b.com");
+  const [email, setEmail] = useState("a@m.com");
+  const [password, setPassword] = useState("123456");
 
   // we use the custom hook
   const { userLogin, loginPending } = useLogin();

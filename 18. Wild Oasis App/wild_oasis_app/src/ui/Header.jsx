@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 import Logo from "../ui/Logo";
 import LogOut from "../features/authentication/LogOut";
+import HeaderMenu from "./HeaderMenu";
 
 const StyledHeader = styled.header`
   background-color: var(--color-grey-0);
@@ -18,7 +19,11 @@ function Header() {
   return (
     <StyledHeader>
       <Logo />
-      <LogOut />
+
+      <HeaderMenu />
+
+      {/* LogOut is now part of the HeaderMenu */}
+      {/* <LogOut /> */}
     </StyledHeader>
   );
 }
