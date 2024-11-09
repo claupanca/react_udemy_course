@@ -77,6 +77,8 @@ export default function CabinRow({ cabin }) {
   // We have created a CUSTOM HOOK for DELETE
   const { isDeleting, deleteCabin } = useDeleteCabin();
 
+  //
+
   // // get the queryClient
   // const queryClient = useQueryClient();
 
