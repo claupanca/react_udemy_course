@@ -26,7 +26,7 @@ export default function UserAvatar() {
   const { user } = useUser();
 
   const { fullName, avatar } = user.user_metadata;
-  console.log("avatar", avatar === "");
+  // console.log("avatar", avatar === "");
 
   return (
     <StyledUserAvatar>
