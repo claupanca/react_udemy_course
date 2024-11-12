@@ -5,6 +5,7 @@ import { GrDocumentUser } from "react-icons/gr";
 import LogOut from "../features/authentication/LogOut";
 import ButtonIcon from "./ButtonIcon";
 import UserAvatar from "../features/authentication/UserAvatar";
+import DarkModeToggle from "./DarkModeToggle";
 
 const StyledHeaderMenu = styled.ul`
   /* list-style-type: none; */
@@ -25,7 +26,7 @@ export default function HeaderMenu() {
           <GrDocumentUser />
         </ButtonIcon>
       </li>
-      <li>Dark Mode Toggle</li>
+      <DarkModeToggle />
       <li>
         <LogOut />
       </li>

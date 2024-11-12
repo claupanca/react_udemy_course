@@ -73,17 +73,17 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
   let { data, error } = await supabase.auth.updateUser(query);
   // console.log("data", data);
 
-  // 2. Upload the Avatar Image
-  // create a unique name for the image
-  const imageName = `avatar-${Math.random()}-${avatar.name}`;
-  // console.log("avatar", avatar);
-  let { error: storageError } = await supabase.storage
-    .from("avatars")
-    .upload(imageName, avatar);
-
   // 3. If there is an avatar, we update the user with the Avatar Name
   // we create the image path
   if (avatar) {
+    // 2. Upload the Avatar Image
+    // create a unique name for the image
+    const imageName = `avatar-${Math.random()}-${avatar.name}`;
+    // console.log("avatar", avatar);
+    let { error: storageError } = await supabase.storage
+      .from("avatars")
+      .upload(imageName, avatar);
+
     const imagePath = `${SUPABASE_URL}/storage/v1/object/public/avatars/${imageName}`;
 
     let { data: avatarData, error: avatarError } =
@@ -95,7 +95,7 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
     return avatarData;
   }
 
-  if (error || storageError) {
+  if (error) {
     throw new Error(error.message);
   }
 

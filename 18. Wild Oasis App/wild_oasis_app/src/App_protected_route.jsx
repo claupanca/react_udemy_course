@@ -27,6 +27,7 @@ import {
 import { Toaster } from "react-hot-toast";
 import CheckInOut from "./pages/CheckInOut";
 import ProtectedRoute from "./ui/ProtectedRoute";
+import { DarkModeProvider } from "./context/DarkModeContext";
 
 // React Query
 const queryClient = new QueryClient({
@@ -66,42 +67,44 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <GlobalStyles />
-      <BrowserRouter>
-        <Routes>
-          {/* we wrap the main Route (appLayout) into the protected Route */}
-          <Route
-            element={
-              <ProtectedRoute>
-                <AppLayout />
-              </ProtectedRoute>
-            }
-          >
-            {/* we have placed all Routes inside the layout and use the <Outlet/> to display them */}
-            {/* <Route element={<AppLayout />}> */}
-            {/* since we have a duplicate, we use Navigate to */}
-            <Route index element={<Navigate replace to="dashboard" />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="bookings" element={<Bookings />} />
-            <Route path="bookings/:id" element={<Booking />} />
-            <Route path="checkin/:id" element={<CheckInOut />} />
-            <Route path="cabins" element={<Cabins />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="account" element={<Account />} />
-            <Route path="users" element={<Users />} />
-          </Route>
+    <DarkModeProvider>
+      <QueryClientProvider client={queryClient}>
+        <GlobalStyles />
+        <BrowserRouter>
+          <Routes>
+            {/* we wrap the main Route (appLayout) into the protected Route */}
+            <Route
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
+              {/* we have placed all Routes inside the layout and use the <Outlet/> to display them */}
+              {/* <Route element={<AppLayout />}> */}
+              {/* since we have a duplicate, we use Navigate to */}
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="bookings" element={<Bookings />} />
+              <Route path="bookings/:id" element={<Booking />} />
+              <Route path="checkin/:id" element={<CheckInOut />} />
+              <Route path="cabins" element={<Cabins />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="account" element={<Account />} />
+              <Route path="users" element={<Users />} />
+            </Route>
 
-          <Route path="login" element={<Login />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </BrowserRouter>
-      {/* Floating Dev Tools */}
-      <ReactQueryDevtools initialIsOpen={"open"} />
-      {/* FIxed element Dev Tools */}
-      {/* <ReactQueryDevtoolsPanel setIsOpen={true} /> */}
-      <Toaster />
-    </QueryClientProvider>
+            <Route path="login" element={<Login />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </BrowserRouter>
+        {/* Floating Dev Tools */}
+        <ReactQueryDevtools initialIsOpen={"open"} />
+        {/* FIxed element Dev Tools */}
+        {/* <ReactQueryDevtoolsPanel setIsOpen={true} /> */}
+        <Toaster />
+      </QueryClientProvider>
+    </DarkModeProvider>
   );
 }
 
