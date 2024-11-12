@@ -55,9 +55,9 @@ export async function getCurrentUser() {
 }
 
 export async function updateCurrentUser({ password, fullName, avatar }) {
-  console.log("password", password);
-  console.log("fullName", fullName);
-  console.log("avatar", avatar);
+  // console.log("password", password);
+  // console.log("fullName", fullName);
+  // console.log("avatar", avatar);
 
   // We are using the same Function to Update the Password OR the Name, that's why we have the 2 if's, to build the correct query depending on the OPTION
   let query = {};
@@ -71,7 +71,7 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
 
   // 1. Update the passowd OR the name of the current user
   let { data, error } = await supabase.auth.updateUser(query);
-  console.log("data", data);
+  // console.log("data", data);
 
   // 2. Upload the Avatar Image
   // create a unique name for the image
@@ -80,23 +80,26 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
   let { error: storageError } = await supabase.storage
     .from("avatars")
     .upload(imageName, avatar);
-  // return data;
 
   // 3. If there is an avatar, we update the user with the Avatar Name
   // we create the image path
-  const imagePath = `${SUPABASE_URL}/storage/v1/object/public/avatars/${imageName}`;
+  if (avatar) {
+    const imagePath = `${SUPABASE_URL}/storage/v1/object/public/avatars/${imageName}`;
 
-  let { data: avatarData, error: avatarError } = await supabase.auth.updateUser(
-    {
-      data: {
-        avatar: imagePath,
-      },
-    }
-  );
+    let { data: avatarData, error: avatarError } =
+      await supabase.auth.updateUser({
+        data: {
+          avatar: imagePath,
+        },
+      });
+    return avatarData;
+  }
 
-  if (error || storageError || avatarError) {
+  if (error || storageError) {
     throw new Error(error.message);
   }
+
+  return data;
 }
 
 export async function logout() {
