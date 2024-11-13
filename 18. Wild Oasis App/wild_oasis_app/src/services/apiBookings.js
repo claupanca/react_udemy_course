@@ -38,6 +38,30 @@ export async function getBookings({ filter, sort, pagination }) {
     throw new Error("Booking not found");
   }
 
+  // console.log(
+  //   "bookings",
+  //   data.map((item) => {
+  //     const daysAgo7 = new Date();
+  //     daysAgo7.setDate(daysAgo7.getDate() - 20);
+  //     const itemDate = new Date(item.created_at);
+  //     console.log("days", daysAgo7);
+  //     console.log("itemDate", itemDate);
+  //     if (daysAgo7 > itemDate) {
+  //       console.log("over7Dayse");
+  //     } else {
+  //       console.log("in 7 days");
+  //     }
+  //   })
+  // );a
+  // console.log("data", data);
+
+  // const { data: dateData } = await supabase
+  //   .from("bookings")
+  //   .select("*")
+  //   .lt("created_at", "Thu, 17 Oct 2024 09:17:14 GMT");
+
+  // console.log("dateData", dateData);
+
   return { data, count };
 }
 
@@ -58,6 +82,7 @@ export async function getBooking(id) {
 
 // Returns all BOOKINGS that are were created after the given date. Useful to get bookings created in the last 30 days, for example.
 export async function getBookingsAfterDate(date) {
+  console.log("date", date);
   const { data, error } = await supabase
     .from("bookings")
     .select("created_at, totalPrice, extrasPrice")
