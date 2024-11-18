@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import useFilterBookingsByLast from "./useFilterBookings";
+import Spinner from "../../ui/Spinner";
+import useFilterStays from "./useFilterStays";
+import Stats from "./Stats";
+import SalesChart from "./SalesChart";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -11,29 +15,31 @@ const StyledDashboardLayout = styled.div`
 `;
 
 export default function DashboardLayout() {
-  const [urlState] = useSearchParams();
+  // const [urlState] = useSearchParams();
   // const [filter, setFilter] = useState();
 
-  useEffect(() => {
-    // setFilter(Number(urlState.get("last")));
-    const date = new Date();
-    date.setDate(date.getDate() - Number(urlState.get("last")));
+  const { filterBookingsbyLast, isPending: bookingsPending } =
+    useFilterBookingsByLast();
+  const { confirmedStays, isPending: staysPending } = useFilterStays();
 
-    filterBookingsByLast(date.toDateString());
-  }, [urlState]);
-
-  // console.log("date", date);
+  // console.log("bookings", filterBookingsbyLast);
+  // console.log("stays", confirmedStays);
 
   // console.log("filter", filter);
 
-  const { filterBookingsByLast, isPending } = useFilterBookingsByLast();
+  if (bookingsPending || staysPending) {
+    return <Spinner />;
+  }
 
   return (
     <StyledDashboardLayout>
-      <div>Statistics</div>
+      <Stats
+        bookings={filterBookingsbyLast}
+        confirmedStays={confirmedStays}
+      ></Stats>
       <div>Todays activity</div>
       <div>Chart for Stay durations</div>
-      <div>Chart of sales</div>
+      <SalesChart />
     </StyledDashboardLayout>
   );
 }
