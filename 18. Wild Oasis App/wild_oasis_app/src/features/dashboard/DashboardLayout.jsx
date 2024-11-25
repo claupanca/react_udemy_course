@@ -6,6 +6,7 @@ import Spinner from "../../ui/Spinner";
 import useFilterStays from "./useFilterStays";
 import Stats from "./Stats";
 import SalesChart from "./SalesChart";
+import DurationChart from "./DurationChart";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -39,7 +40,8 @@ export default function DashboardLayout() {
       ></Stats>
       <div>Todays activity</div>
       <div>Chart for Stay durations</div>
-      <SalesChart />
+      {/* <SalesChart /> */}
+      <DurationChart confirmedStays={confirmedStays} />
     </StyledDashboardLayout>
   );
 }

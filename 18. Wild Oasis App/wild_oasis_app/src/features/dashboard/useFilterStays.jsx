@@ -5,6 +5,10 @@ import { useSearchParams } from "react-router-dom";
 export default function useFilterStays() {
   const [urlState] = useSearchParams();
 
+  if (urlState.get("last") === null) {
+    urlState.set("last", 7);
+  }
+
   const filterDate = new Date();
   filterDate.setDate(filterDate.getDate() - Number(urlState.get("last")));
 
@@ -12,6 +16,8 @@ export default function useFilterStays() {
     queryFn: () => getStaysAfterDate(filterDate.toDateString()),
     queryKey: ["staysLast", `last-${urlState.get("last")}`],
   });
+
+  // console.log("filterStatys", filterStaysByLast);
 
   // we compute only the confirmed stays (checked-in or checked-out. NOT UNCONFIRMED)
   const confirmedStays = filterStaysByLast?.filter(
