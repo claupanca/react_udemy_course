@@ -39,9 +39,8 @@ export default function DashboardLayout() {
         confirmedStays={confirmedStays}
       ></Stats>
       <div>Todays activity</div>
-      <div>Chart for Stay durations</div>
-      {/* <SalesChart /> */}
       <DurationChart confirmedStays={confirmedStays} />
+      {/* <SalesChart /> */}
     </StyledDashboardLayout>
   );
 }
