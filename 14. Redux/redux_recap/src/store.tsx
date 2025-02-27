@@ -8,13 +8,13 @@ import accountReducer from "./features/account/accountSlice";
 import customerReducer from "./features/customer/customerSlice";
 
 // action creators
-import {
-  deposit,
-  withdraw,
-  requestLoan,
-  payLoan,
-} from "./features/account/accountSlice";
-import { newCustomer, updateName } from "./features/customer/customerSlice";
+// import {
+//   deposit,
+//   withdraw,
+//   requestLoan,
+//   payLoan,
+// } from "./features/account/accountSlice";
+// import { newCustomer, updateName } from "./features/customer/customerSlice";
 
 const rootReducer = combineReducers({
   account: accountReducer,

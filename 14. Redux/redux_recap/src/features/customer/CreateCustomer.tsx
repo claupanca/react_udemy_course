@@ -1,10 +1,16 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { newCustomer } from "../customer/customerSlice";
 
 const Customer: React.FC = () => {
   const [fullName, setFullName] = useState("");
   const [nationalId, setNationalId] = useState("");
 
-  function handleClick() {}
+  const dispatch = useDispatch();
+
+  function handleClick() {
+    dispatch(newCustomer(fullName, nationalId));
+  }
 
   return (
     <div>
