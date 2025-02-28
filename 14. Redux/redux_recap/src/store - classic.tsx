@@ -4,7 +4,7 @@ import { combineReducers, createStore } from "redux";
 // for future, we can also split the rootReducer into it's file
 
 // reducers
-import accountReducer from "./features/account/accountSlice";
+import accountReducer from "./features/account/accountSlice - classic";
 import customerReducer from "./features/customer/customerSlice";
 
 // action creators

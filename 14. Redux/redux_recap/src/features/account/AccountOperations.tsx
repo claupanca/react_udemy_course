@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { deposit, withdraw, loan, payLoan } from "./accountSlice";
+import { deposit, withdraw, loan, payLoan } from "./accountSlice - classic";
 
 const AccountOperations: React.FC = () => {
   const [depositAmount, setDepositAmount] = useState<number>(0);
