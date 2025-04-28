@@ -2,7 +2,6 @@ import Link from "next/link";
 
 const Logo: React.FC = () => {
   return (
-    // <a href='/' className='flex items-center gap-4 z-10'>
     <Link href='/'>
       <img
         height='60'
@@ -14,7 +13,6 @@ const Logo: React.FC = () => {
         The Wild Oasis
       </span>
     </Link>
-    // </a>
   );
 };
 

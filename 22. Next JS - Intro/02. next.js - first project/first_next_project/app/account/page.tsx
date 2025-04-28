@@ -1,3 +1,4 @@
+import Counter from "../components/Counter";
 import Navigation from "../components/navigation";
 
 const Page: React.FC = () => {
@@ -5,6 +6,7 @@ const Page: React.FC = () => {
     <div>
       {/* <Navigation /> */}
       <h1>Account page</h1>
+      <Counter users={"some data"} />
     </div>
   );
 };
