@@ -1,3 +1,4 @@
+import Logo from "./components/Logo";
 import Navigation from "./components/navigation";
 
 interface RootLayout {
@@ -11,7 +12,10 @@ const RootLayout: React.FC<RootLayout> = ({ children }) => {
   return (
     <html lang='en'>
       <body>
-        <Navigation />
+        <header>
+          <Logo />
+          <Navigation />
+        </header>
         <main>{children}</main>
         <footer>Copyright by Claudiu - 2025</footer>
       </body>

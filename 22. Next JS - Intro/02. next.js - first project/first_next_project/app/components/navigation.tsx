@@ -1,10 +1,8 @@
 import Link from "next/link";
-import Logo from "./Logo";
 
 export default function Navigation() {
   return (
     <div>
-      <Logo />
       <ul>
         <li>
           <Link href='/'>Home</Link>
