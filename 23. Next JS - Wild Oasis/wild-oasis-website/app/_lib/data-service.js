@@ -5,7 +5,7 @@ import { supabase } from "./supabase";
 // GET
 
 export async function getCabin(id) {
-  console.log("-------------------------------------------", supabase);
+  // console.log("-------------------------------------------", supab÷ase);
   const { data, error } = await supabase
     .from("cabins")
     .select("*")
