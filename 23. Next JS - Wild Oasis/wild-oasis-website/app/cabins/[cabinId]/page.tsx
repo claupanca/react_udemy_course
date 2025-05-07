@@ -1,5 +1,5 @@
-import Spinner from "@/app/_components/Spinner";
-import { getCabin } from "@/app/_lib/data-service";
+// import Spinner from "@/app/_components/Spinner";
+import { getCabin, getCabins } from "@/app/_lib/data-service";
 import { EyeSlashIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 
@@ -16,8 +16,12 @@ import Image from "next/image";
 //     "https://dclaevazetcjjkrzczpc.supabase.co/storage/v1/object/public/cabin-images/cabin-001.jpg",
 // };
 
+interface Params {
+  cabinId: number;
+}
+
 // dynamic metadata
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params }: { params: Params }) {
   // we fetch the cabin data again to get the name of the cabin
   const cabin = await getCabin(params.cabinId);
 
@@ -26,15 +30,25 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function Page({ params }) {
+export async function generateStaticParams() {
+  const cabins = await getCabins();
+
+  const ids = cabins.map((cabin) => ({ cabinId: String(cabin.id) }));
+  console.log('id"s from the cabins', ids);
+
+  return ids;
+}
+
+export default async function Page({ params }: { params: Params }) {
   console.log("params from Page", params);
 
   const cabin = await getCabin(params.cabinId);
 
   console.log("cabin from server", cabin);
 
-  const { id, name, maxCapacity, regularPrice, discount, image, description } =
-    cabin;
+  // const { id, name, maxCapacity, regularPrice, discount, image, description } =
+  //   cabin;
+  const { name, maxCapacity, image, description } = cabin;
 
   return (
     <div className="max-w-6xl mx-auto mt-8">
