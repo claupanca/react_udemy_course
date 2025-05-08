@@ -9,6 +9,9 @@ export const metadata = {
   title: "Cabins",
 };
 
+// to revalidate (refetch data)
+export const revalidate = 3600;
+
 export default function Page() {
   // CHANGE
   // const cabins = [];
