@@ -2,11 +2,11 @@ import CabinCard from "@/app/_components/CabinCard";
 import { getCabins } from "../_lib/data-service";
 import { unstable_noStore as noStore } from "next/cache";
 
-async function CabinList() {
+async function CabinList({ filter }) {
   noStore();
 
   const cabins = await getCabins();
-  console.log("cabin list", cabins);
+  // console.log("cabin list", cabins);
 
   if (!cabins.length) return null;
 
@@ -15,6 +15,8 @@ async function CabinList() {
   //       resolve("Resolved adfter ");
   //     }, 5000)
   //   );
+
+  console.log("filter from Cabinlist", filter);
 
   return (
     <>

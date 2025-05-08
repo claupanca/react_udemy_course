@@ -12,13 +12,16 @@ export const metadata = {
 // to revalidate (refetch data)
 export const revalidate = 3600;
 
-export default function Page() {
+export default function Page({ searchParams }) {
   // CHANGE
   // const cabins = [];
   // moved to the Cabin List to Suspense
   // const cabins = await getCabins();
 
   // console.log("cabins", cabins);
+  console.log("search params", searchParams);
+  // small - medium - large - all
+  const filter = searchParams?.capacity ?? "all";
 
   return (
     <div>
@@ -34,8 +37,10 @@ export default function Page() {
         to paradise.`}
       </p>
 
+      <div>Filter</div>
+
       <Suspense fallback={<Spinner />}>
-        <CabinList />
+        <CabinList filter={filter} />
       </Suspense>
 
       {/* we moved the data fething in the CabinList component */}
