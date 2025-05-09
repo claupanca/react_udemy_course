@@ -4,6 +4,7 @@
 import CabinList from "@/app/_components/CabinList";
 import { Suspense } from "react";
 import Spinner from "@/app/_components/Spinner";
+import CabinsFilter from "@/app/_components/CabinsFilter";
 
 export const metadata = {
   title: "Cabins",
@@ -12,7 +13,12 @@ export const metadata = {
 // to revalidate (refetch data)
 export const revalidate = 3600;
 
-export default function Page({ searchParams }) {
+export default function Page({
+  searchParams,
+}: {
+  // searchParams switches the page to DYNAMIC RENDERING
+  searchParams: { [key: string]: string };
+}) {
   // CHANGE
   // const cabins = [];
   // moved to the Cabin List to Suspense
@@ -37,9 +43,11 @@ export default function Page({ searchParams }) {
         to paradise.`}
       </p>
 
-      <div>Filter</div>
+      <div className="flex justify-end mb-8">
+        <CabinsFilter />
+      </div>
 
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<Spinner />} key={filter}>
         <CabinList filter={filter} />
       </Suspense>
 
